@@ -1,0 +1,30 @@
+body{
+    background-color: #131516;
+}
+.meuh1{
+    color: #fd0000 !important;
+}
+.nav-red{
+    background-color: #6f1f21 !important;
+}
+#logo{
+    width: 50px;
+    height: 100%;
+    margin-right: 15px;
+}
+.logo-brand:hover,
+.logo-brand:focus{
+    opacity: 0.6;
+}
+#nav-menu{
+    margin-right: 15rem;
+}
+
+.carousel-item > img{
+    width: 80% !important;
+    height: 100%;
+}
+
+.carousel-inner > .carousel-item > img {
+    margin: 0 auto;
+  }
