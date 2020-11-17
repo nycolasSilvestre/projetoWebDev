@@ -1,11 +1,21 @@
 body{
-    background-color: #131516;
+    /* background-color: #131516; */
 }
 .meuh1{
     color: #fd0000 !important;
 }
+.btn-nav{
+    background-color: #fff;
+    color: #6f1f21 !important;
+    font-weight: 700;
+}
 .nav-red{
     background-color: #6f1f21 !important;
+}   
+.btn-nav:hover,
+.btn-nav:focus{
+    background-color: #cc2a30;
+    color: #fff !important;
 }
 #logo{
     width: 50px;
@@ -19,12 +29,13 @@ body{
 #nav-menu{
     margin-right: 15rem;
 }
-
-.carousel-item > img{
-    width: 80% !important;
-    height: 100%;
+main{
+    padding-top: 8rem;
 }
-
-.carousel-inner > .carousel-item > img {
-    margin: 0 auto;
-  }
+#label{
+    margin-top: 4.5rem;
+    background-color: #000000;
+    opacity: 0.8;
+    color: #eed37b;
+    position: fixed;
+}
