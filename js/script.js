@@ -80,6 +80,18 @@ function getMoviesAll(){
     return movies
 }
 
+function getFavoriteMovies(){
+    let favMovies =[]
+    favMovies.push(new Movie('Toy Story 4','2019','Animação','John Lasseter, Josh Cooley','Tom Hanks, Tim Allen, Laurie Metcalf, Annie Potts, Joan Cusack, Patricia Arquette, Bonnie Hunt, Jeff Garlin','img/posters/ToyStory 4.jpg'))
+    favMovies.push(new Movie('Lego Movie 2','2019','Animação','Mike Mitchell','Chris Pratt, Tiffany Haddish, Morgan Freeman, Elizabeth Banks, Charlie Day, Channing Tatum, Jonah Hill, Alison Brie, Will Arnett','img/posters/Lego-2.jpg'))
+    favMovies.push(new Movie('BAD BOYS FOR LIFE','2019','ação','Adil El Arbi, Bilall Fallah','Will Smith, Martin Lawrence, Paola Nunez, Jacob Scipio, Vanessa Hudgens','img/posters/bad boys.jpg'))
+    favMovies.push(new Movie('STAR WARS: THE RISE OF SKYWALKER','2019','ficção','J.J. Abrams','Daisy Ridley, Oscar Isaac, John Boyega, Adam Driver, Keri Russell, Lupita Nyong`o, Mark Hamill, Carrie Fisher, Richard Grant, Anthony Daniels, Domhnall Gleeson, Dominic Monaghan, Greg Grunberg','img/posters/STAR WARS - THE RISE OF SKYWALKER.jpg'))
+    favMovies.push(new Movie('JUMANJI: THE NEXT LEVEL','2019','ação /ficção','Jake Kasdan',' Dwayne Johnson, Jack Black, Karen Gillan, Kevin Hart, Danny DeVito, Nick Jonas, Awkwafina , Alex Wolff, Ser’Darius Blain, Madison Iseman, Morgan Turner','img/posters/jumanji_the_next_level.jpg'))
+    favMovies.push(new Movie('MARRIAGE STORY','2019','Drama','Noah Baumbach','Scarlett Johansson, Adam Driver, Laura Dern, Ray Liotta, Alan Alda, Wallace Shawn, Julie Hagerty','img/posters/MARRIAGE STORY.jpg'))
+    favMovies.push(new Movie('Joker','2019','Drama/ ação','Todd Phillips',' Joaquin Phoenix, Robert De Niro, Zazie Beetz, Frances Conroy, Brett Cullen, Bill Camp, Shea Whigham, Douglas Hodge','img/posters/Joker.jpg'))
+    return favMovies
+}
+
 function getMoviesByName(){}
 function addMovieCardToRow(rowID,card){
     let row = document.getElementById(rowID)
@@ -115,18 +127,13 @@ function loadPage(){
 function login(){
     let hello = document.getElementById("helloUser") 
     let favoritos = document.getElementById("btn-favoritos")
-    let modal = document.getElementById("loginModal")
     let user = document.getElementById("login-username")
     let pass= document.getElementById("login-password")
     let fields = [user,pass]
     if (!checkForm(fields)){
         return
     }
-    modal.classList.remove('show');
-    modal.setAttribute('aria-hidden', 'true');
-    modal.setAttribute('style', 'display: none');
-    const modalBck = document.getElementsByClassName('modal-backdrop');
-    document.body.removeChild(modalBck[0]);
+    hideModal("loginModal")
     favoritos.style.display = 'block'
     hello.style.display = 'block'
     hello.innerHTML += user.value
@@ -140,12 +147,19 @@ function hide(element){
     element.style.display = 'none'
 }
 
-
+function hideModal(modalId){
+    let modal = document.getElementById(modalId)
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    modal.setAttribute('style', 'display: none');
+    const modalBck = document.getElementsByClassName('modal-backdrop');
+    document.body.removeChild(modalBck[0]);
+    document.body.className = document.body.className.replace("modal-open","");  
+}
 
 function signUp(){
     let hello = document.getElementById("helloUser") 
     let favoritos = document.getElementById("btn-favoritos")
-    let modal = document.getElementById("signupModal")
     let name = document.getElementById("signUp-name")
     let lastName= document.getElementById("signUp-lastname")
     let user = document.getElementById("signUp-username")
@@ -154,16 +168,12 @@ function signUp(){
     if (!checkForm(fields)){
         return
     }
-    modal.classList.remove('show');
-    modal.setAttribute('aria-hidden', 'true');
-    modal.setAttribute('style', 'display: none');
-    const modalBck = document.getElementsByClassName('modal-backdrop');
-    document.body.removeChild(modalBck[0]);
     favoritos.style.display = 'block'
     hello.style.display = 'block'
     hello.innerHTML += user.value
     logbtn = document.getElementById("btn-login")
     signUpbtn = document.getElementById("btn-signup")
+    hideModal("signupModal")
     hide(signUpbtn)
     hide(logbtn)
 }
@@ -182,4 +192,14 @@ function checkForm(fields){
     }
   }
   return true
+}
+
+function listFavoriteMovies(){
+    clenMain()
+    fillMainContent(getFavoriteMovies())
+}
+
+function clenMain(){
+    let main = document.getElementById("main-content")
+    main.innerHTML='<p id="label-resultado" class="text-resultado pl-5">Filmes favoritos</p>'
 }

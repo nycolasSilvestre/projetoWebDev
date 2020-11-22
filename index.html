@@ -28,7 +28,9 @@
             <a class="nav-link" onclick="setBuscaOnFocus()" href="#">Busca</a>
           </li>
           <li class="nav-item" id="btn-favoritos">
-            <a class="nav-link" href="#">Favoritos</a>
+            <button onclick="listFavoriteMovies()" class="btn btn-link text-light">
+              Favoritos
+            </button>
           </li>
           <li class="nav-item" id="btn-login" >
             <button type="button" class="btn btn-link text-light" data-toggle="modal" data-target="#loginModal">
@@ -150,7 +152,7 @@
       </div>
     </section>
     <section id="main-content" class="container pt-5 bg-white">
-      <p class="text-resultado pl-5">Novos filmes adicionados</p>
+      <p id="label-resultado" class="text-resultado pl-5">Novos filmes adicionados</p>
     </section>
     <aside>
     </aside>
