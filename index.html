@@ -12,7 +12,7 @@
 
   <title>Hollywood DataBase</title>
 </head>
-<body onload="fillMainContent(getMoviesAll())">
+<body onload="loadPage()">
   <header>
     <nav class="navbar navbar-expand-lg navbar-dark navbar-marketing mb-5 fixed-top px-5 nav-red">
       <a class="navbar-brand logo-brand" href="index.html"><img  src="img/Logo.png" id="logo" alt="">
@@ -25,16 +25,23 @@
       <div class="collapse navbar-collapse" id="navTog">
         <ul class="navbar-nav ml-auto" id="nav-menu">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Busca</a>
+            <a class="nav-link" onclick="setBuscaOnFocus()" href="#">Busca</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" id="btn-favoritos">
             <a class="nav-link" href="#">Favoritos</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Sign-up</a>
+          <li class="nav-item" id="btn-login" >
+            <button type="button" class="btn btn-link text-light" data-toggle="modal" data-target="#loginModal">
+              Sign In
+            </button>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Sign-in</a>
+          <li class="nav-item" id="btn-signup">
+            <button type="button" class="btn btn-link text-light" data-toggle="modal" data-target="#signupModal">
+              Sign Up
+            </button>
+          </li>
+          <li class="nav-item ml-3 pt-2 text-light" id="helloUser">
+            Olá,
           </li>
         </ul>
       </div>
@@ -42,6 +49,58 @@
     <div id="label" class="container-fluid text-center d-lg-block d-sm-none">
       Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi, numquam aspernatur similique ducimus quis ea mollitia velit consequatur facere temporibus.
     </div>
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginLable">Sign in</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="" class="form container">
+          <label for="login-username">User Name</label>
+          <input class="form-control mb-3" type="email" name="login-username" id="login-username" placeholder="user@email.com">
+          <label for="login-username">Password</label>
+          <input class="form-control mb-3" type="password" name="login-password" id="login-password">
+        </form>
+      </div>
+      <div class="modal-footer justify-content-around">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" onclick="login()" >Sign in</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="signupLable">Sign in</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="" class="form container">
+          <label for="signUp-name">Nome</label>
+          <input class="form-control mb-3" type="text" name="signUp-name" id="signUp-name" placeholder="Nome...">
+          <label for="signUp-lastname">Apelido</label>
+          <input class="form-control mb-3" type="text" name="signUp-lastname" id="signUp-lastname" placeholder="Apelido...">
+          <label for="signUp-username">User Name</label>
+          <input class="form-control mb-3" type="email" name="signUp-username" id="signUp-username" placeholder="user@email.com">
+          <label for="signUp-username">Password</label>
+          <input class="form-control mb-3" type="password" name="signUp-password" id="signUp-password">
+        </form>
+      </div>
+      <div class="modal-footer justify-content-around">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" onclick="signUp()" >Sign in</button>
+      </div>
+    </div>
+  </div>
+</div>
   </header>
   <main>
     <section id="section-busca" class="container text-center">

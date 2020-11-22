@@ -30,7 +30,10 @@ function getRandomBetween(min,max,isMilion){
     }
         return random
 }
-
+function setBuscaOnFocus(){
+    let busca = document.getElementById("inp-busca")
+    busca.focus()
+}
 function buscar(){
     fillMainContent(getMoviesAll())
 }
@@ -99,4 +102,84 @@ function fillMainContent(movieList){
         addMovieCardToRow(rowId,new Card(movieList[i]))
     }
 
+}
+
+function loadPage(){
+    let hello = document.getElementById("helloUser") 
+    let favoritos = document.getElementById("btn-favoritos")
+    hide(hello)
+    hide(favoritos)
+    fillMainContent(getMoviesAll())
+}
+
+function login(){
+    let hello = document.getElementById("helloUser") 
+    let favoritos = document.getElementById("btn-favoritos")
+    let modal = document.getElementById("loginModal")
+    let user = document.getElementById("login-username")
+    let pass= document.getElementById("login-password")
+    let fields = [user,pass]
+    if (!checkForm(fields)){
+        return
+    }
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    modal.setAttribute('style', 'display: none');
+    const modalBck = document.getElementsByClassName('modal-backdrop');
+    document.body.removeChild(modalBck[0]);
+    favoritos.style.display = 'block'
+    hello.style.display = 'block'
+    hello.innerHTML += user.value
+    logbtn = document.getElementById("btn-login")
+    signUpbtn = document.getElementById("btn-signup")
+    hide(signUpbtn)
+    hide(logbtn)
+}
+
+function hide(element){
+    element.style.display = 'none'
+}
+
+
+
+function signUp(){
+    let hello = document.getElementById("helloUser") 
+    let favoritos = document.getElementById("btn-favoritos")
+    let modal = document.getElementById("signupModal")
+    let name = document.getElementById("signUp-name")
+    let lastName= document.getElementById("signUp-lastname")
+    let user = document.getElementById("signUp-username")
+    let pass= document.getElementById("signUp-password")
+    let fields = [name,lastName,user,pass]
+    if (!checkForm(fields)){
+        return
+    }
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    modal.setAttribute('style', 'display: none');
+    const modalBck = document.getElementsByClassName('modal-backdrop');
+    document.body.removeChild(modalBck[0]);
+    favoritos.style.display = 'block'
+    hello.style.display = 'block'
+    hello.innerHTML += user.value
+    logbtn = document.getElementById("btn-login")
+    signUpbtn = document.getElementById("btn-signup")
+    hide(signUpbtn)
+    hide(logbtn)
+}
+
+
+function checkForm(fields){
+  for (i  = 0; i < fields.length; i++) {
+      let element = fields[i];
+      if (element.value==''){
+        element.style.backgroundColor= '#fcfa7f'
+        element.focus()
+        return false
+    }
+    else{
+        element.style.backgroundColor= '#fff'
+    }
+  }
+  return true
 }
