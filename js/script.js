@@ -10,6 +10,7 @@ class Movie{
         this.timeToMake = getRandomBetween(200,730,false)
         this.cost = getRandomBetween(10,150,true)
         this.imageUrl = imageUrl
+        this.nameId = title.replace(/\s/g, "-")
     }
 }
 
@@ -96,7 +97,27 @@ function getMoviesByName(){}
 function addMovieCardToRow(rowID,card){
     let row = document.getElementById(rowID)
     row.innerHTML +='<div class="col-md-6 col-xl-4 mb-5 mt-n5"><div class="card movie-card h-100"'
-    +'onClick="{alert(\''+card.title+'\')}" style="width: 18rem;"><div class="movie-info"><p>'
+    +'data-toggle="modal" data-target="#movieModal-'+card.movie.nameId+'" style="width: 18rem;">'
+    /*antes */
+    +'<div  class="modal fade" id="movieModal-'+card.movie.nameId+'"tabindex="-1" aria-labelledby="movieModal-'+card.movie.nameId+'" aria-hidden="true">'
+    +'<div  class="modal-dialog modal-lg big bg-white">'
+	+'<div  class="modal-content"></div>'
+	+'<div  class="modal-header"><h5 class="modal-title" id="movieLable">Mais detalhes</h5>'
+    +'<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'
+	+'<div  class="modal-body">'
+    +'<div  class="row">'
+	+'<div  class="col"><img src="'+card.movie.imageUrl+'" class="poster-modal" alt=""></div>'
+	+'<div  class="col"><h4 class="mb-4">'
+    +card.title+'</h4><p><strong>Ano lançamento</strong>: '+card.year+'</p><p><strong>Gênero</strong>: '+card.movie.genre+' </p><p><strong>Diretor</strong>: '+card.movie.director
+    +' </p><p><strong>Atores</strong>: '+card.movie.actors+' </p><p><strong>Tempo de gravação</strong>: '+card.movie.timeToMake
+    +' dias</p><p><strong>Custo de produção</strong>: '+card.movie.cost+' </p><hr><h5>Sinopse:</h5><p>Lorem ipsum dolor sit amet consectetur adipisicing elit.'
+    +'Consequatur, eos facere eum odit labore optio laboriosam nobis dolorem unde tempora.</p></div></div>'
+    +'<div  class="modal-footer justify-content-around">'
+    +'<button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal" data-toggle="tooltip" data-placement="left" title="Voltar">'
+    +'<i class="fas fa-arrow-circle-left"></i> Voltar</button><button type="button" class="btn btn-danger btn-lg" data-toggle="tooltip" data-placement="left" title="Adicionar aos favoritos" onclick="addToFavorites()" >'
+    +'<i class="fas fa-heart"></i> Adicionar aos favoritos</button></div></div></div></div>'
+    /*depois */
+    +'<div class="movie-info"><p>'
     +card.title+'</p><p class="text-detalhes">(carregue para ver mais detalhes!</p></div>'
     +'<div class="card-body"><h5 class="card-title">'+card.title+'</h5><h6 class="card-subtitle mb-2 text-muted">'
     +card.year+'</h6><img src="'+card.movie.imageUrl+'" class="card-img" alt=""></div></div></div>'
@@ -203,3 +224,12 @@ function clenMain(){
     let main = document.getElementById("main-content")
     main.innerHTML='<p id="label-resultado" class="text-resultado pl-5">Filmes favoritos</p>'
 }
+
+function addToFavorites(){
+    alert("Filme adicionado aos favoritos!")
+}
+
+function getMovieModal(movie){
+    //
+}
+
