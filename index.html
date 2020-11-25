@@ -49,7 +49,7 @@
         </ul>
       </div>
     </nav>
-    <div id="label" class="container-fluid text-center d-lg-block d-sm-none">
+    <div id="label" class="container-fluid text-center d-none d-lg-block ">
       Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi, numquam aspernatur similique ducimus quis ea mollitia velit consequatur facere temporibus.
     </div>
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModal" aria-hidden="true">
@@ -127,7 +127,7 @@
               </div>
               <div class="col-3">
                 <label for="nome">Ator/ Atriz</label>
-                <input id="nome" class="form-control" type="text" placeholder="TNome do Ator... " aria-label="Search">
+                <input id="nome" class="form-control" type="text" placeholder="Nome do Ator... " aria-label="Search">
               </div>
               <div class="col-3">
                 <label for="nome">Realizador(a)</label>
@@ -153,7 +153,24 @@
       </div>
     </section>
     <section id="main-content" class="container pt-5 bg-white">
-      <p id="label-resultado" class="text-resultado pl-5">Novos filmes adicionados</p>
+      <p id="label-resultado" class="text-resultado pl-5">Novos Filmes</p>
+      <div id="menu-favoritos" class="row justify-content-center mb-3">
+        <ul id="li">
+          <li><a href="#" onclick="listFavoriteMovies()" class="btn-filtro-favoritos">Filmes</a></li>
+        </ul>
+        <ul>
+          <li><a href="#" onclick="listFavoriteActors()" class="btn-filtro-favoritos">Atores</a></li>
+        </ul>
+        <ul>
+          <li><a href="#" onclick="listFavoriteDirectors()" class="btn-filtro-favoritos">Diretores</a></li>
+        </ul>
+        <ul>
+          <li><a href="#" onclick="listFavoriteProducers()" class="btn-filtro-favoritos">Produtores</a></li>
+        </ul>
+        <ul>
+          <li><a href="#" onclick="listFavoriteStudios()" class="btn-filtro-favoritos">Estúdios</a></li>
+        </ul>
+      </div>
     </section>
     <aside>
     </aside>

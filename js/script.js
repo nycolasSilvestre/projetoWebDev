@@ -14,13 +14,106 @@ class Movie{
     }
 }
 
-class Card{
+class Actor{
+    constructor(name, nationality,birthday,age,genre,imageUrl){
+        this.name=name
+        this.nationality=nationality
+        this.birthday=birthday
+        this.age=age
+        this.genre=genre
+        this.imageUrl = imageUrl
+        this.nameId = name.replace(/\s/g, "-")
+    }
+}
+
+class Director{
+    constructor(name, nationality,birthday,age,genre,imageUrl){
+        this.name=name
+        this.nationality=nationality
+        this.birthday=birthday
+        this.age=age
+        this.genre=genre
+        this.imageUrl = imageUrl
+        this.nameId = name.replace(/\s/g, "-")
+    }
+}
+
+class Producer{
+    constructor(name, nationality,birthday,age,genre,imageUrl){
+        this.name=name
+        this.nationality=nationality
+        this.birthday=birthday
+        this.age=age
+        this.genre=genre
+        this.imageUrl = imageUrl
+        this.nameId = name.replace(/\s/g, "-")
+    }
+}
+
+class Studio{
+    constructor(name,creationDate,nationality,city,imageUrl){
+        this.name=name
+        this.creationDate=creationDate
+        this.nationality=nationality
+        this.city=city
+        this.numberOfMovies=getRandomBetween(10,1000,true)
+        this.imageUrl = imageUrl
+        this.nameId = name.replace(/\s/g, "-")
+    }
+}
+/*movies*/
+class Card{ 
     constructor(movie){
         this.movie=movie
         this.title = movie.title
         this.year = movie.year 
     }
 }
+
+class CardActor{ 
+    constructor(actor){
+        this.actor=actor
+        this.title = actor.name
+        if(actor.genre=='Masculino'){
+            this.description='Ator'
+        }else{
+            this.description='Atriz'
+        }
+    }
+}
+
+class CardDirector{ 
+    constructor(director){
+        this.actor=director
+        this.title = director.name
+        if(director.genre=='Masculino'){
+            this.description='Diretor'
+        }else{
+            this.description='Diretora'
+        }
+    }
+}
+
+class CardProducer{ 
+    constructor(producer){
+        this.actor=producer
+        this.title = producer.name
+        if(producer.genre=='Masculino'){
+            this.description='Produtor'
+        }else{
+            this.description='Produtora'
+        }
+    }
+}
+
+class CardStudio{ 
+    constructor(studio){
+        this.studio=studio
+        this.title = studio.name
+        this.description='Estúdio'
+    }
+}
+
 
 /*Functions*/
 
@@ -93,15 +186,57 @@ function getFavoriteMovies(){
     return favMovies
 }
 
+function getFavoriteActors(){
+    let favActors =[]
+    favActors.push(new Actor("Bradley Cooper","EUA","5 de janeiro de 1975",45,"Masculino","img/Actors/BradleyCooper.jpg"))
+    favActors.push(new Actor("Chris Hemsworth","Austrália","11 de agosto de 1983",37,"Masculino","img/Actors/ChrisHemsworth.jpg"))
+    favActors.push(new Actor("Kevin Hart","EUA","6 de julho de 1979",41,"Masculino","img/Actors/KevinHart.jpg"))
+    favActors.push(new Actor("Fernanda Montenegro","Brasil","19 de outubro de 1929",91,"Feminino","img/Actors/FernandaMontenegro.jpg"))
+    favActors.push(new Actor("Margot Robbie","Austrália","02 de julho de 1990",30,"Feminino","img/Actors/MargotRobbie.jpg"))
+    favActors.push(new Actor("Viola Davis","EUA","11 de agosto de 1965",55,"Feminino","img/Actors/ViolaDavis.jpg"))
+    return favActors
+}
+
+function getFavoriteDirectors(){
+    let favDirector =[]
+    favDirector.push(new Director("Bradley Cooper","EUA","5 de janeiro de 1975",45,"Masculino","img/Actors/BradleyCooper.jpg"))
+    favDirector.push(new Director("Chris Hemsworth","Austrália","11 de agosto de 1983",37,"Masculino","img/Actors/ChrisHemsworth.jpg"))
+    favDirector.push(new Director("Kevin Hart","EUA","6 de julho de 1979",41,"Masculino","img/Actors/KevinHart.jpg"))
+    favDirector.push(new Director("Fernanda Montenegro","Brasil","19 de outubro de 1929",91,"Feminino","img/Actors/FernandaMontenegro.jpg"))
+    favDirector.push(new Director("Margot Robbie","Austrália","02 de julho de 1990",30,"Feminino","img/Actors/MargotRobbie.jpg"))
+    favDirector.push(new Director("Viola Davis","EUA","11 de agosto de 1965",55,"Feminino","img/Actors/ViolaDavis.jpg"))
+    return favDirector
+}
+
+function getFavoriteProducers(){
+    let favProducers =[]
+    favProducers.push(new Producer("Bradley Cooper","EUA","5 de janeiro de 1975",45,"Masculino","img/Actors/BradleyCooper.jpg"))
+    favProducers.push(new Producer("Chris Hemsworth","Austrália","11 de agosto de 1983",37,"Masculino","img/Actors/ChrisHemsworth.jpg"))
+    favProducers.push(new Producer("Kevin Hart","EUA","6 de julho de 1979",41,"Masculino","img/Actors/KevinHart.jpg"))
+    favProducers.push(new Producer("Fernanda Montenegro","Brasil","19 de outubro de 1929",91,"Feminino","img/Actors/FernandaMontenegro.jpg"))
+    favProducers.push(new Producer("Margot Robbie","Austrália","02 de julho de 1990",30,"Feminino","img/Actors/MargotRobbie.jpg"))
+    favProducers.push(new Producer("Viola Davis","EUA","11 de agosto de 1965",55,"Feminino","img/Actors/ViolaDavis.jpg"))
+    return favProducers
+}
+
+function getFavoriteStudios(){
+    let favStudios =[]
+    favStudios.push(new Studio("Disney","01 de Janeiro de 1900","EUA","L.A","img/Studios/Disney.jpg"))
+    favStudios.push(new Studio("Fox","01 de Janeiro de 1900","EUA","L.A","img/Studios/Fox.jpg"))
+    favStudios.push(new Studio("Warner Bros","01 de Janeiro de 1900","EUA","L.A","img/Studios/Bros.jpg"))
+    favStudios.push(new Studio("MGM","01 de Janeiro de 1900","EUA","L.A","img/Studios/MGM.png"))
+    favStudios.push(new Studio("Netflix","01 de Janeiro de 2007","EUA","L.A","img/Studios/Netflix.jpg"))
+    return favStudios
+}
 function getMoviesByName(){}
 function addMovieCardToRow(rowID,card){
     let row = document.getElementById(rowID)
     row.innerHTML +='<div class="col-md-6 col-xl-4 mb-5 mt-n5"><div class="card movie-card h-100"'
     +'data-toggle="modal" data-target="#movieModal-'+card.movie.nameId+'" style="width: 18rem;">'
     /*antes */
-    +'<div  class="modal fade" id="movieModal-'+card.movie.nameId+'"tabindex="-1" aria-labelledby="movieModal-'+card.movie.nameId+'" aria-hidden="true">'
+    +'<div  class="modal fade show" id="movieModal-'+card.movie.nameId+'"tabindex="-1" aria-labelledby="movieModal-'+card.movie.nameId+'" aria-hidden="true">'
     +'<div  class="modal-dialog modal-lg big bg-white">'
-	+'<div  class="modal-content"></div>'
+	+'<div  class="modal-content">'
 	+'<div  class="modal-header"><h5 class="modal-title" id="movieLable">Mais detalhes</h5>'
     +'<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'
 	+'<div  class="modal-body">'
@@ -115,13 +250,70 @@ function addMovieCardToRow(rowID,card){
     +'<div  class="modal-footer justify-content-around">'
     +'<button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal" data-toggle="tooltip" data-placement="left" title="Voltar">'
     +'<i class="fas fa-arrow-circle-left"></i> Voltar</button><button type="button" class="btn btn-danger btn-lg" data-toggle="tooltip" data-placement="left" title="Adicionar aos favoritos" onclick="addToFavorites()" >'
-    +'<i class="fas fa-heart"></i> Adicionar aos favoritos</button></div></div></div></div>'
+    +'<i class="fas fa-heart"></i> Adicionar aos favoritos</button></div></div></div></div></div>'
     /*depois */
     +'<div class="movie-info"><p>'
     +card.title+'</p><p class="text-detalhes">(carregue para ver mais detalhes!</p></div>'
     +'<div class="card-body"><h5 class="card-title">'+card.title+'</h5><h6 class="card-subtitle mb-2 text-muted">'
     +card.year+'</h6><img src="'+card.movie.imageUrl+'" class="card-img" alt=""></div></div></div>'
 }
+
+function addPeopleCardToRow(rowID,cardActor){
+    let row = document.getElementById(rowID)
+    row.innerHTML +='<div class="col-md-6 col-xl-4 mb-5 mt-n5"><div class="card movie-card h-100"'
+    +'data-toggle="modal" data-target="#movieModal-'+cardActor.actor.nameId+'" style="width: 18rem;">'
+    /*antes */
+    +'<div  class="modal fade show" id="movieModal-'+cardActor.actor.nameId+'"tabindex="-1" aria-labelledby="movieModal-'+cardActor.actor.nameId+'" aria-hidden="true">'
+    +'<div  class="modal-dialog modal-lg big bg-white">'
+	+'<div  class="modal-content">'
+	+'<div  class="modal-header"><h5 class="modal-title" id="movieLable">Mais detalhes</h5>'
+    +'<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'
+	+'<div  class="modal-body">'
+    +'<div  class="row">'
+	+'<div  class="col"><img src="'+cardActor.actor.imageUrl+'" class="poster-modal" alt=""></div>'
+	+'<div  class="col"><h4 class="mb-4">'
+    +cardActor.title+'</h4><p><strong>Data de Nacscimento</strong>: '+cardActor.actor.birthday+'('+cardActor.actor.age+' anos)</p><p><strong>Gênero</strong>: '+cardActor.actor.genre+' </p>'
+    +'<p><strong>Nacionalidade</strong>: '+cardActor.actor.nationality+' </p><hr><h5>Biografia:</h5><p>Lorem ipsum dolor sit amet consectetur adipisicing elit.'
+    +'Consequatur, eos facere eum odit labore optio laboriosam nobis dolorem unde tempora.</p></div></div>'
+    +'<div  class="modal-footer justify-content-around">'
+    +'<button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal" data-toggle="tooltip" data-placement="left" title="Voltar">'
+    +'<i class="fas fa-arrow-circle-left"></i> Voltar</button><button type="button" class="btn btn-danger btn-lg" data-toggle="tooltip" data-placement="left" title="Adicionar aos favoritos" onclick="addToFavorites()" >'
+    +'<i class="fas fa-heart"></i> Adicionar aos favoritos</button></div></div></div></div></div>'
+    /*depois */
+    +'<div class="movie-info"><p>'
+    +cardActor.title+'</p><p class="text-detalhes">(carregue para ver mais detalhes!</p></div>'
+    +'<div class="card-body"><h5 class="card-title">'+cardActor.title+'</h5><h6 class="card-subtitle mb-2 text-muted">'
+    +cardActor.description+'</h6><img src="'+cardActor.actor.imageUrl+'" class="card-img" alt=""></div></div></div>'
+}
+
+function addStudioCardToRow(rowID,cardStudio){
+    let row = document.getElementById(rowID)
+    row.innerHTML +='<div class="col-md-6 col-xl-4 mb-5 mt-n5"><div class="card movie-card h-100"'
+    +'data-toggle="modal" data-target="#movieModal-'+cardStudio.studio.nameId+'" style="width: 18rem;">'
+    /*antes */
+    +'<div  class="modal fade show" id="movieModal-'+cardStudio.studio.nameId+'"tabindex="-1" aria-labelledby="movieModal-'+cardStudio.studio.nameId+'" aria-hidden="true">'
+    +'<div  class="modal-dialog modal-lg big bg-white">'
+	+'<div  class="modal-content">'
+	+'<div  class="modal-header"><h5 class="modal-title" id="movieLable">Mais detalhes</h5>'
+    +'<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'
+	+'<div  class="modal-body">'
+    +'<div  class="row">'
+	+'<div  class="col"><img src="'+cardStudio.studio.imageUrl+'" class="poster-modal" alt=""></div>'
+	+'<div  class="col"><h4 class="mb-4">'
+    +cardStudio.title+'</h4><p><strong>Data de Criação</strong>: '+cardStudio.studio.creationDate+'</p><p><strong>Nacionalidade</strong>: '+cardStudio.studio.nationality+'</p>'
+    +'<p><strong>Sede</strong>: '+cardStudio.studio.city+'</p><p><strong>Número de obras produzidas</strong>: '+cardStudio.studio.numberOfMovies+'</p><hr><h5>História:</h5><p>Lorem ipsum dolor sit amet consectetur adipisicing elit.'
+    +'Consequatur, eos facere eum odit labore optio laboriosam nobis dolorem unde tempora.</p></div></div>'
+    +'<div  class="modal-footer justify-content-around">'
+    +'<button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal" data-toggle="tooltip" data-placement="left" title="Voltar">'
+    +'<i class="fas fa-arrow-circle-left"></i> Voltar</button><button type="button" class="btn btn-danger btn-lg" data-toggle="tooltip" data-placement="left" title="Adicionar aos favoritos" onclick="addToFavorites()" >'
+    +'<i class="fas fa-heart"></i> Adicionar aos favoritos</button></div></div></div></div></div>'
+    /*depois */
+    +'<div class="movie-info"><p>'
+    +cardStudio.title+'</p><p class="text-detalhes">(carregue para ver mais detalhes!</p></div>'
+    +'<div class="card-body"><h5 class="card-title">'+cardStudio.title+'</h5><h6 class="card-subtitle mb-2 text-muted">'
+    +cardStudio.description+'</h6><img src="'+cardStudio.studio.imageUrl+'" class="card-img" alt=""></div></div></div>'
+}
+
 
 function fillMainContent(movieList){
     rowCounter = 0
@@ -134,8 +326,36 @@ function fillMainContent(movieList){
         }
         addMovieCardToRow(rowId,new Card(movieList[i]))
     }
-
 }
+
+function fillMainContentFavoritos(favoriteList,type){
+    rowCounter = 0
+    rowId = "row"+rowCounter
+    for(i=0; i < favoriteList.length;i++){
+        if(i % 3 == 0){
+            rowCounter += 1
+            rowId = "row"+rowCounter
+            addRow(rowId)
+        }
+        switch (type) {
+            case "actor": 
+                addPeopleCardToRow(rowId,new CardActor(favoriteList[i]))
+                break;
+            case "director": 
+                addPeopleCardToRow(rowId,new CardDirector(favoriteList[i]))
+                break;
+            case "producer": 
+                addPeopleCardToRow(rowId,new CardProducer(favoriteList[i]))
+                break;
+            case "studio": 
+                addStudioCardToRow(rowId,new CardStudio(favoriteList[i]))
+                break;
+            default:
+                break;
+        }
+    }
+}
+
 
 function loadPage(){
     let hello = document.getElementById("helloUser") 
@@ -218,6 +438,27 @@ function checkForm(fields){
 function listFavoriteMovies(){
     clenMain()
     fillMainContent(getFavoriteMovies())
+    updateLabel("Filmes Favoritos")
+}
+function listFavoriteActors(){
+    clenMain()
+    fillMainContentFavoritos(getFavoriteActors(),"actor")
+    updateLabel("Atores Favoritos")
+}
+function listFavoriteDirectors(){
+    clenMain()
+    fillMainContentFavoritos(getFavoriteDirectors(),"director")
+    updateLabel("Diretores Favoritos")
+}
+function listFavoriteProducers(){
+    clenMain()
+    fillMainContentFavoritos(getFavoriteProducers(),"producer")
+    updateLabel("Produtores Favoritos")
+}
+function listFavoriteStudios(){
+    clenMain()
+    fillMainContentFavoritos(getFavoriteStudios(),"studio")
+    updateLabel("Estídios Favoritos")
 }
 
 function clenMain(){
@@ -231,5 +472,10 @@ function addToFavorites(){
 
 function getMovieModal(movie){
     //
+}
+
+function updateLabel(value) {
+    let label = document.getElementById("label-resultado")
+    label.innerHTML=value
 }
 

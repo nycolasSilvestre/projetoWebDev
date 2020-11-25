@@ -111,3 +111,28 @@ main{
     margin-right: auto;
     position: relative;
 }
+
+#menu-favoritos{
+    font-size: large;
+    font-weight: 700;
+    
+}
+
+#menu-favoritos > ul{
+    color: #6f1f21 !important;
+    list-style: none !important;
+}
+
+.btn-filtro-favoritos{
+    color: #6f1f21 !important;
+}
+
+.btn-filtro-favoritos:hover,
+.btn-filtro-favoritos:focus{
+    color: #b43436 !important;
+    list-style: none !important;
+}
+
+.btn-filtro-active{
+    text-decoration: underline;
+}
