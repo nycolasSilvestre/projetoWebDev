@@ -16,7 +16,7 @@
 <body onload="loadPage()">
   <header>
     <nav class="navbar navbar-expand-lg navbar-dark navbar-marketing mb-5 fixed-top px-5 nav-red">
-      <a class="navbar-brand logo-brand" href="index.html"><img  src="img/Logo.png" id="logo" alt="">
+      <a class="navbar-brand logo-brand" href="#"><img  src="img/Logo.png" id="logo" alt="">
       Hollywood DataBase
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navTog" aria-controls="navTog"
@@ -122,30 +122,30 @@
           <div class="colapse mt-4 text-light">
             <div class="row justify-content-center text-header">
               <div class="col-3">
-                <label for="nome">Nome do Filme</label>
-                <input id="nome" class="form-control" type="text" placeholder="Nome do filme... " aria-label="Search">
+                <label for="nomeFilme">Nome do Filme</label>
+                <input id="nomeFilme" class="form-control" type="text" placeholder="Nome do filme... " aria-label="Search">
               </div>
               <div class="col-3">
-                <label for="nome">Ator/ Atriz</label>
-                <input id="nome" class="form-control" type="text" placeholder="Nome do Ator... " aria-label="Search">
+                <label for="nomeAtor">Ator/ Atriz</label>
+                <input id="nomeAtor" class="form-control" type="text" placeholder="Nome do Ator... " aria-label="Search">
               </div>
               <div class="col-3">
-                <label for="nome">Realizador(a)</label>
-                <input id="nome" class="form-control" type="text" placeholder="Nome do Realizador... " aria-label="Search">
+                <label for="nomeRealizador">Realizador(a)</label>
+                <input id="nomeRealizador" class="form-control" type="text" placeholder="Nome do Realizador... " aria-label="Search">
               </div>
             </div>
             <div class="row justify-content-center text-header mt-2">
               <div class="col-3">
-                <label for="nome">Produtor(a)</label>
-                <input id="nome" class="form-control" type="text" placeholder="Nome do Produtor(a)... " aria-label="Search">
+                <label for="nomeProdutor">Produtor(a)</label>
+                <input id="nomeProdutor" class="form-control" type="text" placeholder="Nome do Produtor(a)... " aria-label="Search">
               </div>
               <div class="col-3">
-                <label for="nome">Genero</label>
-                <input id="nome" class="form-control" type="text" placeholder="Genero... " aria-label="Search">
+                <label for="genero">Genero</label>
+                <input id="genero" class="form-control" type="text" placeholder="Genero... " aria-label="Search">
               </div>
               <div class="col-3">
-                <label for="nome">Diretor(a)</label>
-                <input id="nome" class="form-control" type="text" placeholder="Nome do Diretor(a)... " aria-label="Search">
+                <label for="nomeDiretor">Diretor(a)</label>
+                <input id="nomeDiretor" class="form-control" type="text" placeholder="Nome do Diretor(a)... " aria-label="Search">
               </div>
             </div>
           </div>
@@ -155,22 +155,6 @@
     <section id="main-content" class="container pt-5 bg-white">
       <p id="label-resultado" class="text-resultado pl-5">Novos Filmes</p>
       <div id="menu-favoritos" class="row justify-content-center mb-3">
-        <ul id="li">
-          <li><a href="#" onclick="listFavoriteMovies()" class="btn-filtro-favoritos">Filmes</a></li>
-        </ul>
-        <ul>
-          <li><a href="#" onclick="listFavoriteActors()" class="btn-filtro-favoritos">Atores</a></li>
-        </ul>
-        <ul>
-          <li><a href="#" onclick="listFavoriteDirectors()" class="btn-filtro-favoritos">Diretores</a></li>
-        </ul>
-        <ul>
-          <li><a href="#" onclick="listFavoriteProducers()" class="btn-filtro-favoritos">Produtores</a></li>
-        </ul>
-        <ul>
-          <li><a href="#" onclick="listFavoriteStudios()" class="btn-filtro-favoritos">Estúdios</a></li>
-        </ul>
-      </div>
     </section>
     <aside>
     </aside>

@@ -91,130 +91,25 @@
       </div>
     </section>
     <section id="main-content" class="container pt-5 bg-white">
-      <p class="text-resultado pl-5">Novos filmes adicionados</p>
-      <div class="row pl-5 pt-5">
-        <div class="col-md-6 col-xl-4 mb-5 mt-n5">
-          <div class="card movie-card h-100" onClick="getNewMovies()" style="width: 18rem;">
-            <div class="movie-info">
-             <p>007 - No time to Diesss</p>
-             <p class="text-detalhes">(carregue para ver mais detalhes!</p> 
-            </div>
-            <div class="card-body">
-              <h5 class="card-title">007 - No time to Die</h5>
-              <h6 class="card-subtitle mb-2 text-muted">2021</h6>
-              <img src="img/posters/007 - No-Time-to-Die.jpg" class="card-img" alt="">  
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-xl-4 mb-5 mt-n5">
-          <div class="card movie-card h-100" onClick="{alert('Hello from here')}" style="width: 18rem;">
-            <div class="movie-info">
-              <p>Eurovision</p>
-              <p class="text-detalhes">(carregue para ver mais detalhes!</p> 
-            </div>
-            <div class="card-body">
-              <h5 class="card-title">Eurovision</h5>
-              <h6 class="card-subtitle mb-2 text-muted">2020</h6>
-              <img src="img/posters/eurovision.jpg" class="card-img" alt="">  
+      <form action="">
+        <div class="colapse mt-4 text-dark">
+          <div class="container col-4 text-dark mb-5 pb-5">
+              <label for="nomeUserDetails">Nome</label>
+              <input id="nomeUserDetails" class="form-control" type="text" aria-label="Search">
+              <label for="emailUserDetails">E-mail</label>
+              <input id="emailUserDetails" class="form-control" type="text" aria-label="Search">
+              <label for="userBirthDate">Data de Nascimento</label>
+              <input id="userBirthDate" class="form-control" type="date" aria-label="Search">
+              <label for="userBi">B.I</label>
+              <input id="userBi" class="form-control" type="text" aria-label="Search">
             </div>
           </div>
-        </div>
-        <div class="col-md-6 col-xl-4 mb-5 mt-n5">
-          <div class="card movie-card h-100" onClick="{alert('Hello from here')}" style="width: 18rem;">
-            <div class="movie-info">
-              <p>Sing</p>
-              <p class="text-detalhes">(carregue para ver mais detalhes!</p> 
-            </div>
-            <div class="card-body">
-              <h5 class="card-title">Sing</h5>
-              <h6 class="card-subtitle mb-2 text-muted">2016</h6>
-              <img src="img/posters/sing.jpg" class="card-img" alt="">  
-            </div>
+          <div class="text-center mb-5 pb-5">
+            <button style="margin-right: auto;" onclick="fillMainContent(getMoviesAll())" class="btn btn btn-secondary">voltar</button>
+            <button style="margin-left: 25rem;" onclick="salveUserInfo()" class="btn btn btn-success">Salvar</button>
           </div>
         </div>
-      </div>
-      <div class="row pl-5 pt-5">
-        <div class="col-md-6 col-xl-4 mb-5 mt-n5">
-          <div class="card movie-card h-100" onClick="{alert('Hello from here')}" style="width: 18rem;">
-            <div class="movie-info">
-             <p>007 - No time to Diesss</p>
-             <p class="text-detalhes">(carregue para ver mais detalhes!</p> 
-            </div>
-            <div class="card-body">
-              <h5 class="card-title">007 - No time to Die</h5>
-              <h6 class="card-subtitle mb-2 text-muted">2021</h6>
-              <img src="img/posters/007 - No-Time-to-Die.jpg" class="card-img" alt="">  
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-xl-4 mb-5 mt-n5">
-          <div class="card movie-card h-100" onClick="{alert('Hello from here')}" style="width: 18rem;">
-            <div class="movie-info">
-              <p>Eurovision</p>
-              <p class="text-detalhes">(carregue para ver mais detalhes!</p> 
-            </div>
-            <div class="card-body">
-              <h5 class="card-title">Eurovision</h5>
-              <h6 class="card-subtitle mb-2 text-muted">2020</h6>
-              <img src="img/posters/eurovision.jpg" class="card-img" alt="">  
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-xl-4 mb-5 mt-n5">
-          <div class="card movie-card h-100" onClick="{alert('Hello from here')}" style="width: 18rem;">
-            <div class="movie-info">
-              <p>Sing</p>
-              <p class="text-detalhes">(carregue para ver mais detalhes!</p> 
-            </div>
-            <div class="card-body">
-              <h5 class="card-title">Sing</h5>
-              <h6 class="card-subtitle mb-2 text-muted">2016</h6>
-              <img src="img/posters/sing.jpg" class="card-img" alt="">  
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row pl-5 pt-5">
-        <div class="col-md-6 col-xl-4 mb-5 mt-n5">
-          <div class="card movie-card h-100" onClick="{alert('Hello from here')}" style="width: 18rem;">
-            <div class="movie-info">
-             <p>007 - No time to Diesss</p>
-             <p class="text-detalhes">(carregue para ver mais detalhes!</p> 
-            </div>
-            <div class="card-body">
-              <h5 class="card-title">007 - No time to Die</h5>
-              <h6 class="card-subtitle mb-2 text-muted">2021</h6>
-              <img src="img/posters/007 - No-Time-to-Die.jpg" class="card-img" alt="">  
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-xl-4 mb-5 mt-n5">
-          <div class="card movie-card h-100" onClick="{alert('Hello from here')}" style="width: 18rem;">
-            <div class="movie-info">
-              <p>Eurovision</p>
-              <p class="text-detalhes">(carregue para ver mais detalhes!</p> 
-            </div>
-            <div class="card-body">
-              <h5 class="card-title">Eurovision</h5>
-              <h6 class="card-subtitle mb-2 text-muted">2020</h6>
-              <img src="img/posters/eurovision.jpg" class="card-img" alt="">  
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-xl-4 mb-5 mt-n5">
-          <div class="card movie-card h-100" onClick="{alert('Hello from here')}" style="width: 18rem;">
-            <div class="movie-info">
-              <p>Sing</p>
-              <p class="text-detalhes">(carregue para ver mais detalhes!</p> 
-            </div>
-            <div class="card-body">
-              <h5 class="card-title">Sing</h5>
-              <h6 class="card-subtitle mb-2 text-muted">2016</h6>
-              <img src="img/posters/sing.jpg" class="card-img" alt="">  
-            </div>
-          </div>
-        </div>
-      </div>
+      </form> 
     </section>
     <aside>
     </aside>

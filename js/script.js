@@ -56,7 +56,7 @@ class Studio{
         this.creationDate=creationDate
         this.nationality=nationality
         this.city=city
-        this.numberOfMovies=getRandomBetween(10,1000,true)
+        this.numberOfMovies=getRandomBetween(10,1000,false)
         this.imageUrl = imageUrl
         this.nameId = name.replace(/\s/g, "-")
     }
@@ -129,7 +129,10 @@ function setBuscaOnFocus(){
     busca.focus()
 }
 function buscar(){
-    fillMainContent(getMoviesAll())
+    cleanMain()
+    fillMainContent(getMoviesSearch())
+    updateLabel("8 Resuldados encontrados:")
+    cleanFormBusca()
 }
 /* Carrega index com as novidades*/
 function getNewMovies(){
@@ -171,6 +174,19 @@ function getMoviesAll(){
     movies.push(new Movie('black widow','2021','ação','Cate Shortland','Scarlett Johansson, David Harbour, Rachel Weisz, Florence Pugh, William Hurt, Ray Winstone','img/posters/black widow.jpg'))
     movies.push(new Movie('Fast 9','2021','ação /ficção','Justin Lin','Vin Diesel, Michelle Rodriguez, Nathalie Emmanuel, Tyrese Gibson, Chris \'Ludacris\' Bridges, Jordana Brewster, John Cena','img/posters/fast 9.jpg'))
     movies.push(new Movie('Horse Girl','2020','Drama','Jeff Baena','Alison Brie, Molly Shannon, Paul Reiser, Robin Tunney, Jay Duplass','img/posters/Horse-Girl.jpg'))
+    return movies
+}
+
+function getMoviesSearch(){
+    let movies =[]
+    movies.push(new Movie('Sing','2016','Animação','Garth Jennings','Reese Witherspoon, Scarlett Johansson, Taron Egerton, Matthew McConaughey, Nick Offerman, Seth MacFarlane, John C. Reilly, Nick Kroll, Leslie Jones','img/posters/sing.jpg'))
+    movies.push(new Movie('Frozen II','2019','Animação','Chris Buck, Jennifer Lee','Josh Gad, Idina Menzel, Zachary Levi, Sterling K. Brown, Kristen Bell, Evan Rachel Wood','img/posters/frozen-2.jpg'))
+    movies.push(new Movie('Lego Movie 2','2019','Animação','Mike Mitchell','Chris Pratt, Tiffany Haddish, Morgan Freeman, Elizabeth Banks, Charlie Day, Channing Tatum, Jonah Hill, Alison Brie, Will Arnett','img/posters/Lego-2.jpg'))
+    movies.push(new Movie('BAD BOYS FOR LIFE','2019','ação','Adil El Arbi, Bilall Fallah','Will Smith, Martin Lawrence, Paola Nunez, Jacob Scipio, Vanessa Hudgens','img/posters/bad boys.jpg'))
+    movies.push(new Movie('The Kings Man','2019','ação ','Matthew Vaughn','Ralph Fiennes, Gemma Arterton, Liam Neeson, Stanley Tucci, Aaron Taylor-Johnson, Matthew Goode, Charles Dance, Tom Hollander, Daniel Bruhl, Djimon Hounsou, Rhys Ifans','img/posters/The kings Man.jpg'))
+    movies.push(new Movie('MARRIAGE STORY','2019','Drama','Noah Baumbach','Scarlett Johansson, Adam Driver, Laura Dern, Ray Liotta, Alan Alda, Wallace Shawn, Julie Hagerty','img/posters/MARRIAGE STORY.jpg'))
+    movies.push(new Movie('Joker','2019','Drama/ ação','Todd Phillips',' Joaquin Phoenix, Robert De Niro, Zazie Beetz, Frances Conroy, Brett Cullen, Bill Camp, Shea Whigham, Douglas Hodge','img/posters/Joker.jpg'))
+    movies.push(new Movie('Fast 9','2021','ação /ficção','Justin Lin','Vin Diesel, Michelle Rodriguez, Nathalie Emmanuel, Tyrese Gibson, Chris \'Ludacris\' Bridges, Jordana Brewster, John Cena','img/posters/fast 9.jpg'))
     return movies
 }
 
@@ -229,7 +245,13 @@ function getFavoriteStudios(){
     return favStudios
 }
 function getMoviesByName(){}
-function addMovieCardToRow(rowID,card){
+function addMovieCardToRow(rowID,card,isFav){
+    let text ='Adivionar aos favoritos'
+    let  msg ='addToFavorites()'
+    if(isFav){
+        text='Remover dos favoritos'
+        msg='removeFromFavorites()'
+    }
     let row = document.getElementById(rowID)
     row.innerHTML +='<div class="col-md-6 col-xl-4 mb-5 mt-n5"><div class="card movie-card h-100"'
     +'data-toggle="modal" data-target="#movieModal-'+card.movie.nameId+'" style="width: 18rem;">'
@@ -249,8 +271,8 @@ function addMovieCardToRow(rowID,card){
     +'Consequatur, eos facere eum odit labore optio laboriosam nobis dolorem unde tempora.</p></div></div>'
     +'<div  class="modal-footer justify-content-around">'
     +'<button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal" data-toggle="tooltip" data-placement="left" title="Voltar">'
-    +'<i class="fas fa-arrow-circle-left"></i> Voltar</button><button type="button" class="btn btn-danger btn-lg" data-toggle="tooltip" data-placement="left" title="Adicionar aos favoritos" onclick="addToFavorites()" >'
-    +'<i class="fas fa-heart"></i> Adicionar aos favoritos</button></div></div></div></div></div>'
+    +'<i class="fas fa-arrow-circle-left"></i> Voltar</button><button type="button" class="btn btn-danger btn-lg" data-toggle="tooltip" data-placement="left" title="Adicionar aos favoritos" onclick="'+msg+'" >'
+    +'<i class="fas fa-heart"></i> '+text+'</button></div></div></div></div></div>'
     /*depois */
     +'<div class="movie-info"><p>'
     +card.title+'</p><p class="text-detalhes">(carregue para ver mais detalhes!</p></div>'
@@ -315,7 +337,7 @@ function addStudioCardToRow(rowID,cardStudio){
 }
 
 
-function fillMainContent(movieList){
+function fillMainContent(movieList,isFav){
     rowCounter = 0
     rowId = "row"+rowCounter
     for(i=0; i < movieList.length;i++){
@@ -324,7 +346,7 @@ function fillMainContent(movieList){
             rowId = "row"+rowCounter
             addRow(rowId)
         }
-        addMovieCardToRow(rowId,new Card(movieList[i]))
+        addMovieCardToRow(rowId,new Card(movieList[i]),isFav)
     }
 }
 
@@ -362,7 +384,7 @@ function loadPage(){
     let favoritos = document.getElementById("btn-favoritos")
     hide(hello)
     hide(favoritos)
-    fillMainContent(getMoviesAll())
+    fillMainContent(getMoviesAll(),false)
 }
 
 function login(){
@@ -377,7 +399,7 @@ function login(){
     hideModal("loginModal")
     favoritos.style.display = 'block'
     hello.style.display = 'block'
-    hello.innerHTML += user.value
+    hello.innerHTML += '<a href="#" id="nomeUserNav" onclick="getUpdatePage()" class="text-white">'+user.value+'</a>'
     logbtn = document.getElementById("btn-login")
     signUpbtn = document.getElementById("btn-signup")
     hide(signUpbtn)
@@ -411,7 +433,7 @@ function signUp(){
     }
     favoritos.style.display = 'block'
     hello.style.display = 'block'
-    hello.innerHTML += user.value
+    hello.innerHTML += '<a href="#" id="nomeUserNav" onclick="getUpdatePage()" class="text-white">'+user.value+'</a>'
     logbtn = document.getElementById("btn-login")
     signUpbtn = document.getElementById("btn-signup")
     hideModal("signupModal")
@@ -436,42 +458,47 @@ function checkForm(fields){
 }
 
 function listFavoriteMovies(){
-    clenMain()
-    fillMainContent(getFavoriteMovies())
+    cleanMain()
+    showFavoriteMenu()
+    fillMainContent(getFavoriteMovies(),true)
     updateLabel("Filmes Favoritos")
 }
 function listFavoriteActors(){
-    clenMain()
+    cleanMain()
+    showFavoriteMenu()
     fillMainContentFavoritos(getFavoriteActors(),"actor")
     updateLabel("Atores Favoritos")
 }
 function listFavoriteDirectors(){
-    clenMain()
+    cleanMain()
+    showFavoriteMenu()
     fillMainContentFavoritos(getFavoriteDirectors(),"director")
     updateLabel("Diretores Favoritos")
 }
 function listFavoriteProducers(){
-    clenMain()
+    cleanMain()
+    showFavoriteMenu()
     fillMainContentFavoritos(getFavoriteProducers(),"producer")
     updateLabel("Produtores Favoritos")
 }
 function listFavoriteStudios(){
-    clenMain()
+    cleanMain()
+    showFavoriteMenu()
     fillMainContentFavoritos(getFavoriteStudios(),"studio")
     updateLabel("Estídios Favoritos")
 }
 
-function clenMain(){
+function cleanMain(){
     let main = document.getElementById("main-content")
-    main.innerHTML='<p id="label-resultado" class="text-resultado pl-5">Filmes favoritos</p>'
+    main.innerHTML='<p id="label-resultado" class="text-resultado pl-5">Filmes favoritos</p><div id="menu-favoritos" class="row justify-content-center mb-3">'
 }
 
 function addToFavorites(){
-    alert("Filme adicionado aos favoritos!")
+    alert("Conteúdo adicionado aos favoritos!")
 }
 
-function getMovieModal(movie){
-    //
+function removeFromFavorites(){
+    alert("Conteúdo removido dos favoritos!")
 }
 
 function updateLabel(value) {
@@ -479,3 +506,51 @@ function updateLabel(value) {
     label.innerHTML=value
 }
 
+function showFavoriteMenu(){
+    let favMenu = document.getElementById("menu-favoritos")
+    favMenu.innerHTML = '<ul id="li"><li><a href="#" onclick="listFavoriteMovies()" class="btn-filtro-favoritos">Filmes</a></li></ul><ul><li><a href="#" onclick="listFavoriteActors()" class="btn-filtro-favoritos">Atores</a></li></ul><ul><li><a href="#" onclick="listFavoriteDirectors()" class="btn-filtro-favoritos">Diretores</a></li></ul><ul><li><a href="#" onclick="listFavoriteProducers()" class="btn-filtro-favoritos">Produtores</a></li></ul><ul><li><a href="#" onclick="listFavoriteStudios()" class="btn-filtro-favoritos">Estúdios</a></li></ul></div>'
+}
+
+function cleanFormBusca(){
+    let inputs = document.getElementsByTagName("input")
+    for(inp of inputs){
+        inp.value=''
+    }
+}
+
+function getUpdatePage(){
+    let userName = document.getElementById("nomeUserNav")
+    cleanMain()
+    let main = document.getElementById("main-content")
+    main.innerHTML +='<form action=""><div class="colapse mt-4 text-dark"><div class="container col-4 text-dark mb-5 pb-5"><label for="nomeUserDetails">Nome</label><input id="nomeUserDetails" value="'+nomeUserNav.innerHTML+'" class="form-control" type="text" aria-label="Search">'
+    +'<label for="emailUserDetails">E-mail</label>'
+    +'<input id="emailUserDetails" class="form-control" value="user@email.com" type="text" aria-label="Search">'
+    +'<label for="userBirthDate">Data de Nascimento</label>'
+    +'<input id="userBirthDate" value="2020-01-01" class="form-control" type="date" aria-label="Search">'
+    +'<label for="userBi">B.I</label>'
+    +'<input id="userBi" class="form-control" value="0xxxxx0xxxx0x" type="text" aria-label="Search">'
+    +'</div>'
+    +'</div>'
+    +'<div class="text-center mb-5 pb-5">'
+    +'<button style="margin-right: auto;" onclick="updatePageCancel()" class="btn btn btn-secondary">voltar</button>'
+    +'<button style="margin-left: 25rem;" onclick="salveUserInfo()" class="btn btn btn-success">Salvar</button>'
+    +'</div></div></form> '
+    updateLabel("Atualizar dados")
+}
+
+function updatePageCancel(){
+    cleanMain()
+    fillMainContent(getMoviesAll())
+    updateLabel("Novos Filmes")
+}
+
+function salveUserInfo(){
+    nameinp = document.getElementById("nomeUserDetails")
+    alert("Informações salvas com sucesso!")
+    fillMainContent(getMoviesAll())
+    let name = document.getElementById("nomeUserNav")
+    name.innerHTML = nameinp.value
+    cleanMain()
+    fillMainContent(getMoviesAll())
+    updateLabel("Novos Filmes")
+}
