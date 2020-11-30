@@ -280,7 +280,13 @@ function addMovieCardToRow(rowID,card,isFav){
     +card.year+'</h6><img src="'+card.movie.imageUrl+'" class="card-img" alt=""></div></div></div>'
 }
 
-function addPeopleCardToRow(rowID,cardActor){
+function addPeopleCardToRow(rowID,cardActor,isFav){
+    let text ='Adivionar aos favoritos'
+    let  msg ='addToFavorites()'
+    if(isFav){
+        text='Remover dos favoritos'
+        msg='removeFromFavorites()'
+    }
     let row = document.getElementById(rowID)
     row.innerHTML +='<div class="col-md-6 col-xl-4 mb-5 mt-n5"><div class="card movie-card h-100"'
     +'data-toggle="modal" data-target="#movieModal-'+cardActor.actor.nameId+'" style="width: 18rem;">'
@@ -299,8 +305,8 @@ function addPeopleCardToRow(rowID,cardActor){
     +'Consequatur, eos facere eum odit labore optio laboriosam nobis dolorem unde tempora.</p></div></div>'
     +'<div  class="modal-footer justify-content-around">'
     +'<button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal" data-toggle="tooltip" data-placement="left" title="Voltar">'
-    +'<i class="fas fa-arrow-circle-left"></i> Voltar</button><button type="button" class="btn btn-danger btn-lg" data-toggle="tooltip" data-placement="left" title="Adicionar aos favoritos" onclick="addToFavorites()" >'
-    +'<i class="fas fa-heart"></i> Adicionar aos favoritos</button></div></div></div></div></div>'
+    +'<i class="fas fa-arrow-circle-left"></i> Voltar</button><button type="button" class="btn btn-danger btn-lg" data-toggle="tooltip" data-placement="left" title="'+text+'" onclick="'+msg+'" >'
+    +'<i class="fas fa-heart"></i> '+text+'</button></div></div></div></div></div>'
     /*depois */
     +'<div class="movie-info"><p>'
     +cardActor.title+'</p><p class="text-detalhes">(carregue para ver mais detalhes!</p></div>'
@@ -308,7 +314,13 @@ function addPeopleCardToRow(rowID,cardActor){
     +cardActor.description+'</h6><img src="'+cardActor.actor.imageUrl+'" class="card-img" alt=""></div></div></div>'
 }
 
-function addStudioCardToRow(rowID,cardStudio){
+function addStudioCardToRow(rowID,cardStudio,isFav){
+    let text ='Adivionar aos favoritos'
+    let  msg ='addToFavorites()'
+    if(isFav){
+        text='Remover dos favoritos'
+        msg='removeFromFavorites()'
+    }
     let row = document.getElementById(rowID)
     row.innerHTML +='<div class="col-md-6 col-xl-4 mb-5 mt-n5"><div class="card movie-card h-100"'
     +'data-toggle="modal" data-target="#movieModal-'+cardStudio.studio.nameId+'" style="width: 18rem;">'
@@ -327,8 +339,8 @@ function addStudioCardToRow(rowID,cardStudio){
     +'Consequatur, eos facere eum odit labore optio laboriosam nobis dolorem unde tempora.</p></div></div>'
     +'<div  class="modal-footer justify-content-around">'
     +'<button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal" data-toggle="tooltip" data-placement="left" title="Voltar">'
-    +'<i class="fas fa-arrow-circle-left"></i> Voltar</button><button type="button" class="btn btn-danger btn-lg" data-toggle="tooltip" data-placement="left" title="Adicionar aos favoritos" onclick="addToFavorites()" >'
-    +'<i class="fas fa-heart"></i> Adicionar aos favoritos</button></div></div></div></div></div>'
+    +'<i class="fas fa-arrow-circle-left"></i> Voltar</button><button type="button" class="btn btn-danger btn-lg" data-toggle="tooltip" data-placement="left" title="'+text+'" onclick="'+msg+'" >'
+    +'<i class="fas fa-heart"></i> '+text+'</button></div></div></div></div></div>'
     /*depois */
     +'<div class="movie-info"><p>'
     +cardStudio.title+'</p><p class="text-detalhes">(carregue para ver mais detalhes!</p></div>'
@@ -361,16 +373,16 @@ function fillMainContentFavoritos(favoriteList,type){
         }
         switch (type) {
             case "actor": 
-                addPeopleCardToRow(rowId,new CardActor(favoriteList[i]))
+                addPeopleCardToRow(rowId,new CardActor(favoriteList[i]),true)
                 break;
             case "director": 
-                addPeopleCardToRow(rowId,new CardDirector(favoriteList[i]))
+                addPeopleCardToRow(rowId,new CardDirector(favoriteList[i]),true)
                 break;
             case "producer": 
-                addPeopleCardToRow(rowId,new CardProducer(favoriteList[i]))
+                addPeopleCardToRow(rowId,new CardProducer(favoriteList[i]),true)
                 break;
             case "studio": 
-                addStudioCardToRow(rowId,new CardStudio(favoriteList[i]))
+                addStudioCardToRow(rowId,new CardStudio(favoriteList[i]),true)
                 break;
             default:
                 break;
@@ -382,8 +394,10 @@ function fillMainContentFavoritos(favoriteList,type){
 function loadPage(){
     let hello = document.getElementById("helloUser") 
     let favoritos = document.getElementById("btn-favoritos")
+    let logout = document.getElementById("logOut")
     hide(hello)
     hide(favoritos)
+    hide(logout)
     fillMainContent(getMoviesAll(),false)
 }
 
@@ -404,6 +418,8 @@ function login(){
     signUpbtn = document.getElementById("btn-signup")
     hide(signUpbtn)
     hide(logbtn)
+    let logout = document.getElementById("logOut")
+    logout.style.display ='block'
 }
 
 function hide(element){
@@ -439,6 +455,8 @@ function signUp(){
     hideModal("signupModal")
     hide(signUpbtn)
     hide(logbtn)
+    let logout = document.getElementById("logOut")
+    logout.style.display ='block'
 }
 
 
@@ -553,4 +571,13 @@ function salveUserInfo(){
     cleanMain()
     fillMainContent(getMoviesAll())
     updateLabel("Novos Filmes")
+}
+
+
+
+/* Admin pages */
+
+
+function adminLogin(){
+    let window = window.open('mainpage.html','_self')
 }

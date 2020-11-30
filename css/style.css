@@ -136,3 +136,18 @@ main{
 .btn-filtro-active{
     text-decoration: underline;
 }
+
+
+/* admin */
+#telalogin {
+    width: 350;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 1px 5px 30px rgb(195, 195, 195);
+}
+
+#main-section{
+    margin-top: 8rem;
+}

@@ -2,73 +2,93 @@
 <html lang="pt-br">
 
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous" />
+    <link rel="stylesheet" href="/css/style.css" />
     <title>MainPage</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 </head>
 
 <body>
-    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link active" id="pills-create-tab" data-toggle="pill" href="#pills-create" role="tab" aria-controls="pills-home" aria-selected="true">Create</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="pills-edit-tab" data-toggle="pill" href="#pills-edit" role="tab" aria-controls="pills-profile" aria-selected="false">Edit</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="pills-remove-tab" data-toggle="pill" href="#pills-remove" role="tab" aria-controls="pills-contact" aria-selected="false">Remove</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="pills-search-tab" data-toggle="pill" href="#pills-search" role="tab" aria-controls="pills-contact" aria-selected="false">Search</a>
-
-        </li>
-    </ul>
-    <div class="tab-content container" id="pills-tabContent">
-        <div class="tab-pane fade show active" id="pills-create" role="tabpanel" aria-labelledby="pills-create-tab">
-            <form>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="inputName">Original Name</label>
-                        <input type="text" class="form-control" id="inputName" placeholder="Insert Original Name">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="inputPTName">Portuguese Name</label>
-                        <input type="text" class="form-control" id="inputPTName" placeholder="Insert Portuguese Name">
-                    </div>
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark navbar-marketing mb-5 px-5 py-3 fixed-top">
+        <ul class="navbar-nav ml-auto mr-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarMoviesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Filmes
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarMoviesDropdown">
+                  <a class="dropdown-item" href="inserirNovoFilme.html">Inserir novo</a>
+                  <a class="dropdown-item" href="editarFilme.html">Editar existente</a>
+                  <a class="dropdown-item" href="excluirFilme.html">Excluir existente</a>
                 </div>
-                <div class="form-group">
-                    <label for="inputAddress">Sinopse</label>
-                    <input type="text" class="form-control" id="inputSinopse" placeholder="Sinopse">
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-2">
-                        <label for="inputCity">Custo</label>
-                        <input type="text" class="form-control" id="inputCusto">
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label for="inputID">Data</label>
-                        <input type="text" class="form-control" id="inputData">
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label for="inputID">ID</label>
-                        <input type="text" class="form-control" id="inputID">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="gridCheck">
-                        <label class="form-check-label" for="gridCheck">
-                      Clique em mim
-                    </label>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary">Entrar</button>
-            </form>
-        </div>
-        <div class="tab-pane fade" id="pills-edit" role="tabpanel" aria-labelledby="pills-edit-tab">...</div>
-        <div class="tab-pane fade" id="pills-remove" role="tabpanel" aria-labelledby="pills-remove-tab">...</div>
-        <div class="tab-pane fade" id="pills-search" role="tabpanel" aria-labelledby="pills-search-tab">...</div>
-    </div>
+              </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarActorsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Atores
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarActorsDropdown">
+                    <a class="dropdown-item" href="inserirAtor.html">Inserir novo</a>
+                    <a class="dropdown-item" href="editarAtor.html">Editar existente</a>
+                    <a class="dropdown-item" href="excluirAtor.html">Excluir existente</a>
+                  </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDirectorsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Diretores
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDirectorsDropdown">
+                    <a class="dropdown-item" href="inserirDiretor.html">Inserir novo</a>
+                    <a class="dropdown-item" href="editarDiretor.html">Editar existente</a>
+                    <a class="dropdown-item" href="excluirDiretor.html">Excluir existente</a>
+                  </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarProducersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Produtores
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarProducersDropdown">
+                    <a class="dropdown-item" href="inserirProdutor.html">Inserir novo</a>
+                    <a class="dropdown-item" href="editarProdutor.html">Editar existente</a>
+                    <a class="dropdown-item" href="excluirProdutor.html">Excluir existente</a>
+                  </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarStudiosDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Estúdios
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarStudiosDropdown">
+                    <a class="dropdown-item" href="inserirEstudio.html">Inserir novo</a>
+                    <a class="dropdown-item" href="editarEstudio.html">Editar existente</a>
+                    <a class="dropdown-item" href="excluirEstudio.html">Excluir existente</a>
+                  </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarStudiosDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Usuários
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarStudiosDropdown">
+                    <a class="dropdown-item" href="inserirUsuario.html">Inserir novo</a>
+                    <a class="dropdown-item" href="editarUsuario.html">Editar existente</a>
+                    <a class="dropdown-item" href="excluirUsuario.html">Excluir existente</a>
+                  </div>
+            </li>
+        </ul>
+    </nav>
+    <section id="main-section" class=" container text-center">
+        <h3>Bem vindo ao painel de controle do sitio Hollywood Database</h3>
+        <article>
+            <p>Para gerir os dados presentes na base, basta carregar sobre os links acima e efetuar as atualizações
+                necessárias</p>
+        </article>
+    </section>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js "
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj "
+        crossorigin="anonymous "></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js "
+        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx "
+        crossorigin="anonymous "></script>
+    <script src="/js/script.js"></script>
 </body>
 
 </html>
