@@ -392,34 +392,40 @@ function fillMainContentFavoritos(favoriteList,type){
 
 
 function loadPage(){
-    let hello = document.getElementById("helloUser") 
-    let favoritos = document.getElementById("btn-favoritos")
-    let logout = document.getElementById("logOut")
-    hide(hello)
-    hide(favoritos)
-    hide(logout)
+    const token = localStorage.getItem('token')
+    if(!token || token ==null || token == ''){
+        setNotLogedView()    
+    }else{
+        setLogedView()
+    }
+    
     fillMainContent(getMoviesAll(),false)
 }
 
-function login(){
-    let hello = document.getElementById("helloUser") 
-    let favoritos = document.getElementById("btn-favoritos")
-    let user = document.getElementById("login-username")
-    let pass= document.getElementById("login-password")
+async function login(){
+    let loginErrorMessage = document.getElementById('loginErrorMessage')
+    
+    const user = document.getElementById("login-username")
+    const pass= document.getElementById("login-password")
     let fields = [user,pass]
     if (!checkForm(fields)){
         return
     }
-    hideModal("loginModal")
-    favoritos.style.display = 'block'
-    hello.style.display = 'block'
-    hello.innerHTML += '<a href="#" id="nomeUserNav" onclick="getUpdatePage()" class="text-white">'+user.value+'</a>'
-    logbtn = document.getElementById("btn-login")
-    signUpbtn = document.getElementById("btn-signup")
-    hide(signUpbtn)
-    hide(logbtn)
-    let logout = document.getElementById("logOut")
-    logout.style.display ='block'
+    let token =null
+    let loginResponse = await fetch('http://localhost:3000/login',
+        {method: 'POST',headers: new Headers({'content-type': 'application/json'}), body: JSON.stringify({username:user.value,password:pass.value})}
+        );
+    
+    if(!loginResponse.ok){
+        loginErrorMessage.innerHTML=`<p>E-mail ou senha errados. Tente novamente!</p>`
+    }
+    else{
+        token = await loginResponse.json()
+        console.log(token.token)
+        localStorage.setItem("token", token.token);
+        hideModal("loginModal")
+        setLogedView(user.value)
+    }   
 }
 
 function hide(element){
@@ -435,6 +441,7 @@ function hideModal(modalId){
     document.body.removeChild(modalBck[0]);
     document.body.className = document.body.className.replace("modal-open","");  
 }
+
 
 function signUp(){
     let hello = document.getElementById("helloUser") 
@@ -573,7 +580,45 @@ function salveUserInfo(){
     updateLabel("Novos Filmes")
 }
 
+function setLogedView(){
+    let username='s'
+    let hello = document.getElementById("helloUser") 
+    let favoritos = document.getElementById("btn-favoritos")
+    let logbtn = document.getElementById("btn-login")
+    let signUpbtn = document.getElementById("btn-signup")
+    hide(signUpbtn)
+    hide(logbtn)
+    let logout = document.getElementById("logOut")
+    logout.style.display ='block'
+    favoritos.style.display = 'block'
+    hello.style.display = 'block'
+    hello.innerHTML += `<a href="#" id="nomeUserNav" onclick="getUpdatePage()" class="text-white">${username}</a>`
+}
 
+function setNotLogedView(){
+    let hello = document.getElementById("helloUser") 
+    let favoritos = document.getElementById("btn-favoritos")
+    let logout = document.getElementById("logOut")
+    let btnLogin = document.getElementById("btn-login")
+    let btnLogout = document.getElementById("btn-signup")
+    hide(hello)
+    hide(favoritos)
+    hide(logout)
+    btnLogin.style.display = 'block'
+    btnLogout.style.display = 'block'
+}
+async function logout(){
+    let logutResp = await fetch('http://localhost:3000/logout',
+        {method: 'POST',headers: new Headers({'content-type': 'application/json',
+        Authorization: `${localStorage.token}`})}
+        );
+    
+    if(logutResp.ok){
+        localStorage.removeItem('token')
+        alert('Logout efetuado com sucesso!')
+    }
+    loadPage()
+}
 
 /* Admin pages */
 
@@ -581,3 +626,6 @@ function salveUserInfo(){
 function adminLogin(){
     let window = window.open('mainpage.html','_self')
 }
+
+
+

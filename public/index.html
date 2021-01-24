@@ -47,7 +47,7 @@
             Olá,
           </li>
           <li class="nav-item ml-3 text-light" id="logOut">
-            <a type="button" href="index.html" class="btn btn-link text-light">
+            <a type="button" onclick="logout()" class="btn btn-link text-light">
               Log-out
             </a>
           </li>
@@ -68,15 +68,16 @@
       </div>
       <div class="modal-body">
         <form action="" class="form container">
+          <div id="loginErrorMessage"></div>
           <label for="login-username">User Name</label>
-          <input class="form-control mb-3" type="email" name="login-username" id="login-username" placeholder="user@email.com">
+          <input class="form-control mb-3" type="email" name="username" id="login-username" placeholder="user@email.com">
           <label for="login-username">Password</label>
-          <input class="form-control mb-3" type="password" name="login-password" id="login-password">
+          <input class="form-control mb-3" type="password" name="password" id="login-password">
         </form>
       </div>
       <div class="modal-footer justify-content-around">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-danger" onclick="login()" >Sign in</button>
+        <button type="button" onclick="login()" class="btn btn-danger">Sign in</button>
       </div>
     </div>
   </div>
@@ -85,27 +86,28 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="signupLable">Sign in</h5>
+        <h5 class="modal-title" id="signupLable">Sign up</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form action="" class="form container">
+        <form action="/register" method="post" class="form container">
           <label for="signUp-name">Nome</label>
-          <input class="form-control mb-3" type="text" name="signUp-name" id="signUp-name" placeholder="Nome...">
+          <input class="form-control mb-3" type="text" name="signUpName" id="signUp-name" placeholder="Nome...">
           <label for="signUp-lastname">Apelido</label>
-          <input class="form-control mb-3" type="text" name="signUp-lastname" id="signUp-lastname" placeholder="Apelido...">
-          <label for="signUp-username">User Name</label>
-          <input class="form-control mb-3" type="email" name="signUp-username" id="signUp-username" placeholder="user@email.com">
+          <input class="form-control mb-3" type="text" name="signUpLastname" id="signUp-lastname" placeholder="Apelido...">
+          <label for="signUp-username">E-mail</label>
+          <input class="form-control mb-3" type="email" name="signUpEmail" id="signUp-username" placeholder="user@email.com">
           <label for="signUp-username">Password</label>
-          <input class="form-control mb-3" type="password" name="signUp-password" id="signUp-password">
+          <input class="form-control mb-3" type="password" name="signUpPassword" id="signUp-password">
+          <div class="modal-footer justify-content-around">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-danger">Confirmar</button>
+          </div>
         </form>
       </div>
-      <div class="modal-footer justify-content-around">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-danger" onclick="signUp()" >Sign in</button>
-      </div>
+      
     </div>
   </div>
 </div>

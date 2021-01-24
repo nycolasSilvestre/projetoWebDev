@@ -1,32 +1,24 @@
 module.exports = (sequelize, type) =>
-  sequelize.define('movies', {
+  sequelize.define('directors', {
     id: {
       type: type.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    title: {
+    name: {
       type: type.STRING,
       allowNull: false,
     },
-    year: {
-      type: type.INTEGER,
-      allowNull: false,
-    },
-    duration: {
-      type: type.INTEGER,
-      allowNull: false,
-    },
-    totalRecordingDays: {
-      type: type.INTEGER,
-      allowNull: false,
-    },
-    cost: {
-      type: type.INTEGER,
-      allowNull: false,
-    },
-    synopsis: {
+    nationality: {
       type: type.STRING,
+      allowNull: false,
+    },
+    birthday: {
+      type: type.DATE,
+      allowNull: false,
+    },
+    age: {
+      type: type.INTEGER,
       allowNull: false,
     },
     genre: {
@@ -35,10 +27,6 @@ module.exports = (sequelize, type) =>
     },
     pictureUrl: {
       type: type.STRING,
-      allowNull: false,
-    },
-    StudioId: {
-      type: type.INTEGER,
       allowNull: false,
     },
   });

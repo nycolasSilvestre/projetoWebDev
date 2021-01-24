@@ -1,14 +1,36 @@
 const Sequelize  = require('sequelize');
 const MovieModel = require('./models/movies');
+const ActorModel = require('./models/actors');
+const DirectorModel = require('./models/directors');
+const ProducerModel = require('./models/producers');
+const StudioModel = require('./models/studios');
+const UserModel = require('./models/users');
 
 const sequelize = new Sequelize('hollywood', process.env.PGUSER,process.env.PGPASS, {
     host: 'localhost',
     dialect: 'postgres'
-  });
-
+});
 
 
 const Movie = MovieModel(sequelize,Sequelize)
+const Actor = ActorModel(sequelize,Sequelize)
+const Director = DirectorModel(sequelize,Sequelize)
+const Producer = ProducerModel(sequelize,Sequelize)
+const Studio = StudioModel(sequelize,Sequelize)
+const User = UserModel(sequelize,Sequelize)
+
+Movie.belongsToMany(Actor, { through: 'ActorMovies' })
+Actor.belongsToMany(Movie, { through: 'ActorMovies' })
+
+Movie.belongsToMany(Director, { through: 'DirectorMovies' })
+Director.belongsToMany(Movie, { through: 'DirectorMovies' })
+
+Movie.belongsToMany(Producer, { through: 'ProducerMovies' })
+Producer.belongsToMany(Movie, { through: 'ProducerMovies' })
+
+Studio.hasMany(Movie,{ foreignKey: 'StudioId'})
+Movie.belongsTo(Studio)
+
 
 async function testSq(){
     console.log("Trying to connect to db. User:"+process.env.PGUSER+" Pass: "+process.env.PGPASS)
@@ -22,11 +44,17 @@ async function testSq(){
 
 
 
-async function sinc(){
-  await sequelize.sync({ force: true });
+async function sync(){
+  await sequelize.sync({ force: false });
   console.log("sinc")
 }
 
 
 module.exports.testSq = testSq;
-module.exports.sinc = sinc;
+module.exports.sync = sync;
+module.exports.Movie = Movie;
+module.exports.Actor = Actor;
+module.exports.Director = Director;
+module.exports.Producer = Producer;
+module.exports.Studio = Studio;
+module.exports.User = User;
