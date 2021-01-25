@@ -582,11 +582,11 @@ function salveUserInfo(){
 }
 
 async function getNavMenu(isLogged){
-    // const user = await getAccountInfo() 
-    const isAdmin = true //comparar se tem admin em claims
-    const adminBtn = isAdmin ? '<li class="nav-item ml-3 text-light" id="btnAdmin"><a type="button" onclick="openAdmin()" class="btn btn-link text-light">Administração</a></li>' :'';
     let navMenu = document.getElementById('nav-menu')
     if(isLogged){
+        const user = await getAccountInfo() 
+        const isAdmin = user.isAdmin
+        const adminBtn = isAdmin ? '<li class="nav-item ml-3 text-light" id="btnAdmin"><a type="button" onclick="openAdmin()" class="btn btn-link text-light">Administração</a></li>' :'';
         navMenu.innerHTML= '<li class="nav-item active"><a class="nav-link" onclick="setBuscaOnFocus()" href="#">Busca</a>'
               +'</li><li class="nav-item" id="btn-favoritos"><button onclick="listFavoriteMovies()" class="btn btn-link text-light">'
               +'Favoritos</button></li><li class="nav-item ml-3 pt-2 text-light" id="helloUser">Olá, </li>'
@@ -633,6 +633,15 @@ async function logout(){
     }
     window.location.href="index.html"
     loadPage()
+}
+
+async function openAdmin(){
+    debugger
+    let adminPanel = await fetch('http://localhost:3000/adminpanel',{
+        headers: new Headers({'content-type': 'application/json',
+        Authorization: `Bearer ${localStorage.token}`})}
+    )
+    document.body.innerHTML= await adminPanel.text()
 }
 
 /* Admin pages */

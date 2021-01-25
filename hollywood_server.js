@@ -33,5 +33,7 @@ require('./routes/DirectorController')(app);
 require('./routes/ProducerController')(app);
 require('./routes/StudioController')(app);
 require('./routes/MovieController')(app);
+require('./routes/AdminController')(app);
+
 
 //db.sync()

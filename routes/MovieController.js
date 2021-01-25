@@ -31,7 +31,13 @@ module.exports = (app) => {
             StudioId: req.body.StudioId
             })
             let movieActors = req.body.actors
+            let movieDirectors = req.body.directors
+            let movieProducers = req.body.producers
+
             addActorsToMovie(movie.id,movieActors)
+            addDirectorsToMovie(movie,movieDirectors)
+            addProducersToMovie(movie,movieProducers)
+
             res.status(200).send(JSON.stringify(movie,null,2))
         } catch (error) {
             res.status(400).send(JSON.stringify(error,null,2))
@@ -50,6 +56,13 @@ module.exports = (app) => {
                     pictureUrl: req.body.pictureUrl,
                     StudioId: req.body.StudioId
                 },{where:{id:req.params.movieId}})
+                let movieActors = req.body.actors
+                let movieDirectors = req.body.directors
+                let movieProducers = req.body.producers
+    
+                addActorsToMovie(movie.id,movieActors)
+                addDirectorsToMovie(movie,movieDirectors)
+                addProducersToMovie(movie,movieProducers)
                 res.status(200).send(JSON.stringify('Movie successfully updated!',null,2))
             } catch (error) {
                 res.status(400).send(JSON.stringify(error,null,2))
@@ -71,4 +84,20 @@ async function addActorsToMovie(movieId,actors){
         where:{id:actors}
     })
     await movie.setActors(movieActors)
+}
+
+async function addDirectorsToMovie(movieId,directors){
+    let movie = await Movie.findByPk(movieId)
+    let movieDirectors = await db.Director.findAll({
+        where:{id:directors}
+    })
+    await movie.setDirectors(movieDirectors)
+}
+
+async function addProducersToMovie(movieId,producer){
+    let movie = await Movie.findByPk(movieId)
+    let movieProducers = await db.Producer.findAll({
+        where:{id:producer}
+    })
+    await movie.setProducers(movieProducers)
 }

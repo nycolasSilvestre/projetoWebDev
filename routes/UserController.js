@@ -1,5 +1,6 @@
 const db = require('../sequelize')
 const User = db.User
+const Claim = db.Claim
 const bcrypt = require('bcrypt')
 const passport = require('passport');
 const jwt = require("jsonwebtoken");
@@ -15,12 +16,13 @@ module.exports = (app) => {
                 throw new Error('Usuário já existente.')
             }
             const hashedPass = await bcrypt.hash(req.body.signUpPassword,10)
-            await User.create({
+            let newUser = await User.create({
                 first_name: req.body.signUpName,
                 last_name: req.body.signUpLastname,
                 email: req.body.signUpEmail,
                 password: hashedPass
             })
+            await addClaims(newUser.id,[2])
             res.redirect('/index.html')
         } catch (error) {
             console.log(error)
@@ -31,13 +33,19 @@ module.exports = (app) => {
     // app.post('/login', async (req,res) => {
         
     // });
-    app.post("/login", passport.authenticate('local'),
-    function(req,res){
-        const token = jwt.sign({id:req.body.username,claims:['admin']},jwtsec,{expiresIn: 3600})
-        res.status(200).send({
-            auth: true,
-            token: token
+    app.post("/login", passport.authenticate('local'), async function(req,res){
+        try{
+            const user = await getUserByEmail(req.body.username)
+            const userCLaims = await getUserClaims(user.id)
+            const token = jwt.sign({id:req.body.username,claims:userCLaims},jwtsec,{expiresIn: 3600})
+            res.status(200).send({
+                auth: true,
+                token: token
         });
+        }
+        catch(e){
+            res.sendStatus(500)
+        }
     });
     
     app.post("/logout",(req,res)=>{
@@ -50,9 +58,10 @@ module.exports = (app) => {
         const heders = req.headers ? req.headers['authorization'] : null;
         const auth = heders.split(' ')
         const token = auth[1]
-        
-        const user = await getUserByEmail(jwt.verify(token,process.env.JWT_SEC).id)
-        res.status(200).send(JSON.stringify({userid: user.id,email: user.email,firstName:user.first_name,lastName:user.last_name,claims:user.claims}))
+        const tokenInfo = jwt.verify(token,process.env.JWT_SEC)
+        const user = await getUserByEmail(tokenInfo.id)
+        const isAdmin = tokenInfo.claims.includes('Admin')
+        res.status(200).send(JSON.stringify({userid: user.id,email: user.email,firstName:user.first_name,lastName:user.last_name,isAdmin:isAdmin}))
     })
 };
 
@@ -67,10 +76,24 @@ async function getUserById(id){
 
 async function getUserByEmail(userEmail){
     try{
-        user = await User.findOne({where:{email:userEmail}})
+        user = await User.findOne({where:{email:userEmail}},{include: Claim})
         return user
     }
     catch(e){}
+}
+
+async function addClaims(userId,claims){
+    let user = await User.findByPk(userId)
+    await user.setClaims(claims)
+}
+
+async function getUserClaims(userId){
+    const user = await User.findByPk(userId,{include: Claim})
+    let claims =[]
+    user.claims.forEach(claim => {
+        claims.push(claim.claim_name)
+    });
+    return claims
 }
 
 module.exports.getUserByEmail = getUserByEmail;
