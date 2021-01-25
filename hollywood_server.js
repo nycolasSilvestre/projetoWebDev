@@ -29,5 +29,9 @@ app.use(flash())
 
 require('./routes/ActorController')(app);
 require('./routes/UserController')(app);
+require('./routes/DirectorController')(app);
+require('./routes/ProducerController')(app);
+require('./routes/StudioController')(app);
+require('./routes/MovieController')(app);
 
-// db.sync()
+//db.sync()

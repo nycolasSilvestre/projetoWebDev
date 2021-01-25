@@ -46,9 +46,13 @@ module.exports = (app) => {
         })
     });
 
-    app.get("/getuser/:email",authenticateToken, async (req,res) =>{
-        const user = await getUserByEmail(req.params.email)
-        res.status(200).send(JSON.stringify({userid: user.id,email: user.email,firstName:user.first_name,lastName:user.last_name}))
+    app.get("/getaccountinfo",authenticateToken, async (req,res) =>{
+        const heders = req.headers ? req.headers['authorization'] : null;
+        const auth = heders.split(' ')
+        const token = auth[1]
+        
+        const user = await getUserByEmail(jwt.verify(token,process.env.JWT_SEC).id)
+        res.status(200).send(JSON.stringify({userid: user.id,email: user.email,firstName:user.first_name,lastName:user.last_name,claims:user.claims}))
     })
 };
 

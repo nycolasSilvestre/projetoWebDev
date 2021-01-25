@@ -394,11 +394,11 @@ function fillMainContentFavoritos(favoriteList,type){
 function loadPage(){
     const token = localStorage.getItem('token')
     if(!token || token ==null || token == ''){
-        setNotLogedView()    
+        getNavMenu(false)
     }else{
+        getNavMenu(true)
         setLogedView()
     }
-    
     fillMainContent(getMoviesAll(),false)
 }
 
@@ -421,10 +421,10 @@ async function login(){
     }
     else{
         token = await loginResponse.json()
-        console.log(token.token)
         localStorage.setItem("token", token.token);
         hideModal("loginModal")
-        setLogedView(user.value)
+        loadPage()
+        // setLogedView(user.value)
     }   
 }
 
@@ -543,15 +543,16 @@ function cleanFormBusca(){
     }
 }
 
-function getUpdatePage(){
-    let userName = document.getElementById("nomeUserNav")
+async function getUpdatePage(){
+    const user = await getAccountInfo()  
+    // let userName = document.getElementById("nomeUserNav")
     cleanMain()
     let main = document.getElementById("main-content")
-    main.innerHTML +='<form action=""><div class="colapse mt-4 text-dark"><div class="container col-4 text-dark mb-5 pb-5"><label for="nomeUserDetails">Nome</label><input id="nomeUserDetails" value="'+nomeUserNav.innerHTML+'" class="form-control" type="text" aria-label="Search">'
+    main.innerHTML +='<form action=""><div class="colapse mt-4 text-dark"><div class="container col-4 text-dark mb-5 pb-5"><label for="nomeUserDetails">Nome</label><input id="nomeUserDetails" value="'+user.firstName+'" class="form-control" type="text" aria-label="Search">'
+    +'<label for="lastNameUserDetails">Apelido</label>'
+    +'<input id="lastNameUserDetails" class="form-control" value="'+user.lastName+'" type="text" aria-label="Search">'
     +'<label for="emailUserDetails">E-mail</label>'
-    +'<input id="emailUserDetails" class="form-control" value="user@email.com" type="text" aria-label="Search">'
-    +'<label for="userBirthDate">Data de Nascimento</label>'
-    +'<input id="userBirthDate" value="2020-01-01" class="form-control" type="date" aria-label="Search">'
+    +'<input id="emailUserDetails" class="form-control" value="'+user.email+'" type="text" aria-label="Search">'
     +'<label for="userBi">B.I</label>'
     +'<input id="userBi" class="form-control" value="0xxxxx0xxxx0x" type="text" aria-label="Search">'
     +'</div>'
@@ -580,33 +581,46 @@ function salveUserInfo(){
     updateLabel("Novos Filmes")
 }
 
-function setLogedView(){
-    let username='s'
-    let hello = document.getElementById("helloUser") 
-    let favoritos = document.getElementById("btn-favoritos")
-    let logbtn = document.getElementById("btn-login")
-    let signUpbtn = document.getElementById("btn-signup")
-    hide(signUpbtn)
-    hide(logbtn)
-    let logout = document.getElementById("logOut")
-    logout.style.display ='block'
-    favoritos.style.display = 'block'
-    hello.style.display = 'block'
-    hello.innerHTML += `<a href="#" id="nomeUserNav" onclick="getUpdatePage()" class="text-white">${username}</a>`
+async function getNavMenu(isLogged){
+    // const user = await getAccountInfo() 
+    const isAdmin = true //comparar se tem admin em claims
+    const adminBtn = isAdmin ? '<li class="nav-item ml-3 text-light" id="btnAdmin"><a type="button" onclick="openAdmin()" class="btn btn-link text-light">Administração</a></li>' :'';
+    let navMenu = document.getElementById('nav-menu')
+    if(isLogged){
+        navMenu.innerHTML= '<li class="nav-item active"><a class="nav-link" onclick="setBuscaOnFocus()" href="#">Busca</a>'
+              +'</li><li class="nav-item" id="btn-favoritos"><button onclick="listFavoriteMovies()" class="btn btn-link text-light">'
+              +'Favoritos</button></li><li class="nav-item ml-3 pt-2 text-light" id="helloUser">Olá, </li>'
+              +adminBtn
+              +'<li class="nav-item ml-3 text-light" id="logOut"><a type="button" onclick="logout()" class="btn btn-link text-light">'
+              +'Log-out</a></li>'
+    }
+    else{
+        navMenu.innerHTML= '<li class="nav-item active"><a class="nav-link" onclick="setBuscaOnFocus()" href="#">Busca</a></li>'
+                          +'<li class="nav-item" id="btn-login" ><button type="button" class="btn btn-link text-light" data-toggle="modal" data-target="#loginModal">'
+                          +'Sign In</button></li><li class="nav-item" id="btn-signup"><button type="button" class="btn btn-link text-light" data-toggle="modal" data-target="#signupModal">'
+                          +'Sign Up</button></li>'
+                          +'<li class="nav-item ml-3 pt-2 text-light" style="display: none;" id="helloUser">Olá, </li>' 
+    }
 }
 
-function setNotLogedView(){
+async function setLogedView(){
+    const user = await getAccountInfo()
     let hello = document.getElementById("helloUser") 
-    let favoritos = document.getElementById("btn-favoritos")
-    let logout = document.getElementById("logOut")
-    let btnLogin = document.getElementById("btn-login")
-    let btnLogout = document.getElementById("btn-signup")
-    hide(hello)
-    hide(favoritos)
-    hide(logout)
-    btnLogin.style.display = 'block'
-    btnLogout.style.display = 'block'
+    hello.style.display = 'block'
+    hello.innerHTML += `<a href="#" id="nomeUserNav" onclick="getUpdatePage()" class="text-white">${user.firstName}</a>`
 }
+
+async function getAccountInfo(){
+    let resp = await fetch('http://localhost:3000/getaccountinfo',{
+        headers: new Headers({'content-type': 'application/json',
+        Authorization: `Bearer ${localStorage.token}`})}
+    )
+
+    let user = await resp.json()
+    return user
+}
+
+
 async function logout(){
     let logutResp = await fetch('http://localhost:3000/logout',
         {method: 'POST',headers: new Headers({'content-type': 'application/json',
@@ -617,6 +631,7 @@ async function logout(){
         localStorage.removeItem('token')
         alert('Logout efetuado com sucesso!')
     }
+    window.location.href="index.html"
     loadPage()
 }
 
