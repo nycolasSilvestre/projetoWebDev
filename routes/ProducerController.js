@@ -3,7 +3,7 @@ const db = require("../sequelize")
 const Producer = db.Producer
 
 module.exports = (app) => {
-    app.get("/producer", authenticateToken ,(req, res, next) => {
+    app.get("/producer", (req, res, next) => {
         Producer.findAll()
           .then((producer) => {
               res.status(200).send(JSON.stringify(producer,null, 2));

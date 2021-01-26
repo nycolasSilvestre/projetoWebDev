@@ -3,7 +3,7 @@ const db = require("../sequelize")
 const Studio = db.Studio
 
 module.exports = (app) => {
-    app.get("/studio", authenticateToken ,(req, res, next) => {
+    app.get("/studio" ,(req, res, next) => {
         Studio.findAll()
           .then((studio) => {
               res.status(200).send(JSON.stringify(studio,null, 2));

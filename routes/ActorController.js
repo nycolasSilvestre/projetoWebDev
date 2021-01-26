@@ -3,8 +3,8 @@ const db = require("../sequelize")
 const Actor = db.Actor
 
 module.exports = (app) => {
-    app.get("/actors", authenticateToken ,(req, res, next) => {
-        Actor.findAll()
+    app.get("/actors",(req, res, next) => {
+        Actor.findAll({order:[['name','ASC']]})
           .then((actor) => {
               res.status(200).send(JSON.stringify(actor,null, 2));
           });

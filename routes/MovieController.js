@@ -4,7 +4,7 @@ const db = require("../sequelize")
 const Movie = db.Movie
 
 module.exports = (app) => {
-    app.get("/movie", authenticateToken ,(req, res, next) => {
+    app.get("/movie", (req, res, next) => {
         Movie.findAll()
           .then((movie) => {
               res.status(200).send(JSON.stringify(movie,null, 2));
