@@ -1,4 +1,4 @@
-const { authenticateToken } = require("../config/jwt");
+const { authenticateToken } = require("../Auth/authentication");
 const db = require("../sequelize")
 const Director = db.Director
 

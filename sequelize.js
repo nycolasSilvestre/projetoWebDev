@@ -6,7 +6,7 @@ const ProducerModel = require('./models/producers');
 const StudioModel = require('./models/studios');
 const UserModel = require('./models/users');
 const ClaimsModel = require('./models/claims');
-
+const bcrypt = require('bcrypt')
 const sequelize = new Sequelize('hollywood', process.env.PGUSER,process.env.PGPASS, {
     host: 'localhost',
     dialect: 'postgres'
@@ -30,7 +30,7 @@ Director.belongsToMany(Movie, { through: 'DirectorMovies' })
 Movie.belongsToMany(Producer, { through: 'ProducerMovies' })
 Producer.belongsToMany(Movie, { through: 'ProducerMovies' })
 
-Studio.hasMany(Movie,{ foreignKey: 'StudioId'})
+Studio.hasMany(Movie,{ foreignKey: 'studioId'})
 Movie.belongsTo(Studio)
 
 User.belongsToMany(Claim,{through: 'UserClaims'})
@@ -65,7 +65,17 @@ async function testSq(){
 
 
 async function sync(){
-  await sequelize.sync({ force: false });
+  await sequelize.sync({ force: true });
+  await Claim.create({claim_name:'Admin'})
+  await Claim.create({claim_name:'DefaultUser'})
+  const hashedPass = await bcrypt.hash(process.env.ADMIN_PASS,10)
+  let user = await User.create({
+    first_name: 'Nycolas',
+    last_name: 'Silvestre',
+    email: 'nycolaszsilvestre@gmail.com',
+    password: hashedPass}
+    )
+    user.setClaims([1])
   console.log("sinc")
 }
 

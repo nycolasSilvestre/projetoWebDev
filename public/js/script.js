@@ -147,7 +147,7 @@ function addRow(idStr){
 }
 function getMoviesAll(){
     let movies =[]
-    movies.push(new Movie('Eurovision','2020','Musical','David Dobkin','Will Ferrell, Rachel McAdams, Dan Stevens, Natasia Demetriou, Pierce Brosnan','img/posters/eurovision.jpg'))
+    movies.push(new Movie('Eurovision','2020','Musical','David Dobkin','Will Ferrell, Rachel McAdams, Dan Stevens, Natasia Demetriou, Pierce Brosnan','https://www.joblo.com/assets/images/joblo/posters/2018/11/Mary-Poppins-Returns-char-pos-4.jpg'))
     movies.push(new Movie('Sing','2016','Animação','Garth Jennings','Reese Witherspoon, Scarlett Johansson, Taron Egerton, Matthew McConaughey, Nick Offerman, Seth MacFarlane, John C. Reilly, Nick Kroll, Leslie Jones','img/posters/sing.jpg'))
     movies.push(new Movie('I Saw the Light','2016','Biografia','Marc Abraham','Tom Hiddleston, Elizabeth Olsen, David Krumholtz, Bradley Whitford','img/posters/ISawTheLight.jpg'))
     movies.push(new Movie('Step Up - All IN','2014','Musical','Trish Sie',' Ryan Guzman, Briana Evigan, Misha Gabriel, Izabella Miko','img/posters/step-up-all-in.jpg'))
@@ -391,29 +391,43 @@ function fillMainContentFavoritos(favoriteList,type){
 }
 
 
-function loadPage(){
+async function loadPage(){   
     const token = localStorage.getItem('token')
-    if(!token || token ==null || token == ''){
-        getNavMenu(false)
+    if(token && token != null && token != ''){
+        try {
+            const user = await getAccountInfo()
+            getNavMenu(true,user)
+            setLogedView()
+            cleanMain()
+            fillMainContent(getMoviesAll(),false)
+        } catch (error) {
+            logout()
+        }
     }else{
-        getNavMenu(true)
-        setLogedView()
+        getNavMenu(false,null)
+        fillMainContent(getMoviesAll(),false)
     }
-    fillMainContent(getMoviesAll(),false)
+    
 }
 
-async function login(){
+async function login(user=null,pass=null){
     let loginErrorMessage = document.getElementById('loginErrorMessage')
+    let modalName = 'signupModal'
+
+    if(user == null && pass == null){
+        user = document.getElementById("login-username")
+        pass= document.getElementById("login-password")
+        modalName ='loginModal'
+    }
     
-    const user = document.getElementById("login-username")
-    const pass= document.getElementById("login-password")
     let fields = [user,pass]
     if (!checkForm(fields)){
         return
     }
     let token =null
     let loginResponse = await fetch('http://localhost:3000/login',
-        {method: 'POST',headers: new Headers({'content-type': 'application/json'}), body: JSON.stringify({username:user.value,password:pass.value})}
+        {method: 'POST',headers: new Headers({'content-type': 'application/json'}),
+         body: JSON.stringify({username:user.value,password:pass.value})}
         );
     
     if(!loginResponse.ok){
@@ -422,9 +436,8 @@ async function login(){
     else{
         token = await loginResponse.json()
         localStorage.setItem("token", token.token);
-        hideModal("loginModal")
+        hideModal(modalName)
         loadPage()
-        // setLogedView(user.value)
     }   
 }
 
@@ -443,27 +456,30 @@ function hideModal(modalId){
 }
 
 
-function signUp(){
-    let hello = document.getElementById("helloUser") 
-    let favoritos = document.getElementById("btn-favoritos")
+async function signUp(){
     let name = document.getElementById("signUp-name")
     let lastName= document.getElementById("signUp-lastname")
     let user = document.getElementById("signUp-username")
     let pass= document.getElementById("signUp-password")
+    let signUpErrorMsg= document.getElementById("signUpErrorMsg")
     let fields = [name,lastName,user,pass]
     if (!checkForm(fields)){
+        signUpErrorMsg.innerHTML ='<p>Valide os campos e tente novamente!</p>'
         return
     }
-    favoritos.style.display = 'block'
-    hello.style.display = 'block'
-    hello.innerHTML += '<a href="#" id="nomeUserNav" onclick="getUpdatePage()" class="text-white">'+user.value+'</a>'
-    logbtn = document.getElementById("btn-login")
-    signUpbtn = document.getElementById("btn-signup")
-    hideModal("signupModal")
-    hide(signUpbtn)
-    hide(logbtn)
-    let logout = document.getElementById("logOut")
-    logout.style.display ='block'
+    let signUptResp = await fetch('http://localhost:3000/register',
+    {method: 'POST',headers: new Headers({'content-type': 'application/json'}),
+     body: JSON.stringify({signUpName:name.value,signUpLastname:lastName.value,signUpEmail:user.value
+        ,signUpPassword:pass.value})}
+    );
+    if(!signUptResp.ok){
+        signUpErrorMsg.innerHTML='Erro. Tente novamente mais tarde!'
+        return
+    }
+    
+    await login(user,pass)
+    
+    
 }
 
 
@@ -581,10 +597,9 @@ function salveUserInfo(){
     updateLabel("Novos Filmes")
 }
 
-async function getNavMenu(isLogged){
+async function getNavMenu(isLogged,user){
     let navMenu = document.getElementById('nav-menu')
     if(isLogged){
-        const user = await getAccountInfo() 
         const isAdmin = user.isAdmin
         const adminBtn = isAdmin ? '<li class="nav-item ml-3 text-light" id="btnAdmin"><a type="button" onclick="openAdmin()" class="btn btn-link text-light">Administração</a></li>' :'';
         navMenu.innerHTML= '<li class="nav-item active"><a class="nav-link" onclick="setBuscaOnFocus()" href="#">Busca</a>'
@@ -615,34 +630,66 @@ async function getAccountInfo(){
         headers: new Headers({'content-type': 'application/json',
         Authorization: `Bearer ${localStorage.token}`})}
     )
-
+    if(!resp.ok){
+        throw new Error(resp.json().name)
+    }
     let user = await resp.json()
     return user
 }
 
 
 async function logout(){
-    let logutResp = await fetch('http://localhost:3000/logout',
+    let logoutResp = await fetch('http://localhost:3000/logout',
         {method: 'POST',headers: new Headers({'content-type': 'application/json',
         Authorization: `${localStorage.token}`})}
         );
     
-    if(logutResp.ok){
+    if(logoutResp.ok){
         localStorage.removeItem('token')
-        alert('Logout efetuado com sucesso!')
+        alert('Sessão encerrada.')
     }
     window.location.href="index.html"
     loadPage()
 }
 
 async function openAdmin(){
-    debugger
     let adminPanel = await fetch('http://localhost:3000/adminpanel',{
         headers: new Headers({'content-type': 'application/json',
         Authorization: `Bearer ${localStorage.token}`})}
     )
-    document.body.innerHTML= await adminPanel.text()
+    if(!adminPanel.ok){
+        logout()
+    }else{
+        document.body.innerHTML= await adminPanel.text()
+    }
+    
 }
+
+async function openAdminInsertItem(type){
+    let adminPanel = await fetch(`http://localhost:3000/adminpanel/insert/${type}`,{
+        headers: new Headers({'content-type': 'application/json',
+        Authorization: `Bearer ${localStorage.token}`})}
+    )
+    if(!adminPanel.ok){
+        logout()
+    }else{
+        document.body.innerHTML= await adminPanel.text()
+    }
+}
+
+async function openAdminEditItem(type){
+    debugger
+    let adminPanel = await fetch(`http://localhost:3000/adminpanel/edit/${type}`,{
+        headers: new Headers({'content-type': 'application/json',
+        Authorization: `Bearer ${localStorage.token}`})}
+    )
+    if(!adminPanel.ok){
+        logout()
+    }else{
+        document.body.innerHTML= await adminPanel.text()
+    }
+}
+
 
 /* Admin pages */
 
@@ -650,6 +697,3 @@ async function openAdmin(){
 function adminLogin(){
     let window = window.open('mainpage.html','_self')
 }
-
-
-

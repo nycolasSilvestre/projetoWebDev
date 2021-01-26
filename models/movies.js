@@ -9,6 +9,10 @@ module.exports = (sequelize, type) =>
       type: type.STRING,
       allowNull: false,
     },
+    portuguese_title: {
+      type: type.STRING,
+      allowNull: false,
+    },
     year: {
       type: type.INTEGER,
       allowNull: false,
@@ -37,7 +41,7 @@ module.exports = (sequelize, type) =>
       type: type.STRING,
       allowNull: false,
     },
-    StudioId: {
+    studioId: {
       type: type.INTEGER,
       allowNull: false,
     },

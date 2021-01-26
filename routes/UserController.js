@@ -5,7 +5,9 @@ const bcrypt = require('bcrypt')
 const passport = require('passport');
 const jwt = require("jsonwebtoken");
 const jwtsec = process.env.JWT_SEC
-const { authenticateToken } = require("../config/jwt");
+const jwtRefSec = process.env.JWT_SEC_refresh
+const { authenticateToken } = require("../Auth/authentication");
+const claims = require('../models/claims');
 
 module.exports = (app) => {
     app.post('/register', async (req,res) => {

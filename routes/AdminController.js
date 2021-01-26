@@ -1,5 +1,5 @@
-const { authenticateToken } = require("../config/jwt");
-const { autheticateAdmin } = require("../config/jwt");
+const { authenticateToken } = require("../Auth/authentication");
+const { autheticateAdmin } = require("../Auth/authentication");
 const adminViews = require('../public/Backoffice/adminViews')
 // const fs = require('fs')
 
@@ -9,8 +9,14 @@ const adminViews = require('../public/Backoffice/adminViews')
 
 module.exports = (app) => {
     app.get("/adminpanel", authenticateToken, autheticateAdmin,(req, res, next) => {
-        res.status(200).send(adminViews.adminpanel)
-        });
-    
+        res.status(200).send(adminViews.getMainPanel())
+    });
+
+    app.get("/adminpanel/insert/:type", authenticateToken, autheticateAdmin,(req, res, next) => {
+        res.status(200).send(adminViews.getAddItem(req.params.type))
+    });
+
+    app.get("/adminpanel/edit/:type", authenticateToken, autheticateAdmin,(req, res, next) => {
+        res.status(200).send(adminViews.getEditItem(req.params.type))
+    });
 };
-  

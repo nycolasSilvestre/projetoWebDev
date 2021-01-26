@@ -1,4 +1,4 @@
-const { authenticateToken } = require("../config/jwt");
+const { authenticateToken } = require("../Auth/authentication");
 const db = require("../sequelize")
 const Studio = db.Studio
 
@@ -21,6 +21,7 @@ module.exports = (app) => {
            const studio = await Studio.create({
                 name: req.body.name,
                 creationDate: req.body.creationDate,
+                founder: req.body.founder,
                 nationality: req.body.nationality,
                 city: req.body.city,
                 numberOfMovies: req.body.numberOfMovies,
@@ -35,6 +36,7 @@ module.exports = (app) => {
             try {
                 Studio.update({
                     name: req.body.name,
+                    founder: req.body.founder,
                     creationDate: req.body.creationDate,
                     nationality: req.body.nationality,
                     city: req.body.city,

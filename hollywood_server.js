@@ -36,4 +36,4 @@ require('./routes/MovieController')(app);
 require('./routes/AdminController')(app);
 
 
-//db.sync()
+// db.sync()

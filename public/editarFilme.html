@@ -79,8 +79,28 @@
     <form class="form-inline mb-5">
         <label for="actorName">Nome do Filme</label>
         <input class="form-control mx-5" type="text" placeholder="Insira o nome do Filme a ser editado">
-        <button class="btn btn-primary">Buscar</button>
+        <button class="btn btn-primary" type="button" onclick="searchMovieToEdit()">Buscar</button>
     </form>
+    <div id="tableSearch">
+        <table class="table table-striped">
+            <thead>
+                <th>Selecionar</th>
+                <th>Nome do filme</th>
+                <th>Diretor/Diretores</th>
+                <th>Ator/Atores</th>
+                <th>Ano</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><button class="btn btn-dark" onclick="updateMovie()">Editar</button></td>
+                    <td>adeededfefdedassssssssssssssssssss</td>
+                    <td>badeededfefdedassssssssssssssssssss</td>
+                    <td>badeededfefdedassssssssssssssssssss</td>
+                    <td>2000</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <hr>
        <form>
         <div class="form-row">
