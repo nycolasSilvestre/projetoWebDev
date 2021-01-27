@@ -149,16 +149,16 @@ function addRow(idStr){
     let mainContent = document.getElementById('main-content')
     mainContent.innerHTML +='<div id='+idStr+' class="row pl-5 pt-5"></div>'
 }
-function getMoviesAll(){
-    let movies =[]
-    movies.push(new Movie(1,'Eurovision','2020','Musical','David Dobkin','Will Ferrell, Rachel McAdams, Dan Stevens, Natasia Demetriou, Pierce Brosnan','https://www.joblo.com/assets/images/joblo/posters/2018/11/Mary-Poppins-Returns-char-pos-4.jpg',10,100))
-    movies.push(new Movie(1,'Sing','2016','Animação','Garth Jennings','Reese Witherspoon, Scarlett Johansson, Taron Egerton, Matthew McConaughey, Nick Offerman, Seth MacFarlane, John C. Reilly, Nick Kroll, Leslie Jones','img/posters/sing.jpg',10,100))
-    movies.push(new Movie(1,'I Saw the Light','2016','Biografia','Marc Abraham','Tom Hiddleston, Elizabeth Olsen, David Krumholtz, Bradley Whitford','img/posters/ISawTheLight.jpg',10,100))
-    movies.push(new Movie(1,'Step Up - All IN','2014','Musical','Trish Sie',' Ryan Guzman, Briana Evigan, Misha Gabriel, Izabella Miko','img/posters/step-up-all-in.jpg',10,100))
-    movies.push(new Movie(1,'Metalica - Through The never','2013','Musical','Nimrod Antal','Dane DeHaan, Lars Ulrich, James Hetfield, Kirk Hammett','img/posters/metallica-through-never-pos.jpg',10,100))
-    movies.push(new Movie(1,'Frozen II','2019','Animação','Chris Buck, Jennifer Lee','Josh Gad, Idina Menzel, Zachary Levi, Sterling K. Brown, Kristen Bell, Evan Rachel Wood','img/posters/frozen-2.jpg',10,100))
-    movies.push(new Movie(1,'Toy Story 4','2019','Animação','John Lasseter, Josh Cooley','Tom Hanks, Tim Allen, Laurie Metcalf, Annie Potts, Joan Cusack, Patricia Arquette, Bonnie Hunt, Jeff Garlin','img/posters/ToyStory 4.jpg',10,100))
-    movies.push(new Movie(1,'Lego Movie 2','2019','Animação','Mike Mitchell','Chris Pratt, Tiffany Haddish, Morgan Freeman, Elizabeth Banks, Charlie Day, Channing Tatum, Jonah Hill, Alison Brie, Will Arnett','img/posters/Lego-2.jpg',10,100))
+async function getMoviesAll(){
+    let movies = await getAllMovies()
+    // movies.push(new Movie(1,'Eurovision','2020','Musical','David Dobkin','Will Ferrell, Rachel McAdams, Dan Stevens, Natasia Demetriou, Pierce Brosnan','https://www.joblo.com/assets/images/joblo/posters/2018/11/Mary-Poppins-Returns-char-pos-4.jpg',10,100))
+    // movies.push(new Movie(1,'Sing','2016','Animação','Garth Jennings','Reese Witherspoon, Scarlett Johansson, Taron Egerton, Matthew McConaughey, Nick Offerman, Seth MacFarlane, John C. Reilly, Nick Kroll, Leslie Jones','img/posters/sing.jpg',10,100))
+    // movies.push(new Movie(1,'I Saw the Light','2016','Biografia','Marc Abraham','Tom Hiddleston, Elizabeth Olsen, David Krumholtz, Bradley Whitford','img/posters/ISawTheLight.jpg',10,100))
+    // movies.push(new Movie(1,'Step Up - All IN','2014','Musical','Trish Sie',' Ryan Guzman, Briana Evigan, Misha Gabriel, Izabella Miko','img/posters/step-up-all-in.jpg',10,100))
+    // movies.push(new Movie(1,'Metalica - Through The never','2013','Musical','Nimrod Antal','Dane DeHaan, Lars Ulrich, James Hetfield, Kirk Hammett','img/posters/metallica-through-never-pos.jpg',10,100))
+    // movies.push(new Movie(1,'Frozen II','2019','Animação','Chris Buck, Jennifer Lee','Josh Gad, Idina Menzel, Zachary Levi, Sterling K. Brown, Kristen Bell, Evan Rachel Wood','img/posters/frozen-2.jpg',10,100))
+    // movies.push(new Movie(1,'Toy Story 4','2019','Animação','John Lasseter, Josh Cooley','Tom Hanks, Tim Allen, Laurie Metcalf, Annie Potts, Joan Cusack, Patricia Arquette, Bonnie Hunt, Jeff Garlin','img/posters/ToyStory 4.jpg',10,100))
+    // movies.push(new Movie(1,'Lego Movie 2','2019','Animação','Mike Mitchell','Chris Pratt, Tiffany Haddish, Morgan Freeman, Elizabeth Banks, Charlie Day, Channing Tatum, Jonah Hill, Alison Brie, Will Arnett','img/posters/Lego-2.jpg',10,100))
     // movies.push(new Movie(1,'Spider-man in Spider-verse','2018','Animação','Peter Ramsey, Bob Persichetti, Rodney Rothman','Shameik Moore, Mahershala Ali, Liev Schreiber, Jake Johnson, Hailee Steinfeld, Lily Tomlin, Nicolas Cage','img/posters/Spider-man in spider.verse-2.jpg',10,100))
     // movies.push(new Movie(1,'BAD BOYS FOR LIFE','2019','ação','Adil El Arbi, Bilall Fallah','Will Smith, Martin Lawrence, Paola Nunez, Jacob Scipio, Vanessa Hudgens','img/posters/bad boys.jpg'))
     // movies.push(new Movie(1,'STAR WARS: THE RISE OF SKYWALKER','2019','ficção','J.J. Abrams','Daisy Ridley, Oscar Isaac, John Boyega, Adam Driver, Keri Russell, Lupita Nyong`o, Mark Hamill, Carrie Fisher, Richard Grant, Anthony Daniels, Domhnall Gleeson, Dominic Monaghan, Greg Grunberg','img/posters/STAR WARS - THE RISE OF SKYWALKER.jpg'))
@@ -404,13 +404,13 @@ async function loadPage(){
             getNavMenu(true,user)
             setLogedView()
             cleanMain()
-            fillMainContent(getMoviesAll(),false)
+            fillMainContent(await getMoviesAll(),false)
         } catch (error) {
             logout()
         }
     }else{
         getNavMenu(false,null)
-        fillMainContent(getMoviesAll(),false)
+        fillMainContent(await getMoviesAll(),false)
     }
     
 }
@@ -718,21 +718,35 @@ async function openAdminEditItem(type){
     }
 }
 
+function getMultiSelection(itemId){
+    let selectOptions = [];
+    for (let option of document.getElementById(itemId).options) {
+      if (option.selected) {
+        selectOptions.push(option.value);
+      }
+    }
+    return selectOptions
+}
 async function insertMovie(){
-    let inputNome = getElementById('inputNome')
-    let inputPTNome = getElementById('inputPTNome')
-    let inputAno = getElementById('inputAno')
-    let inputCusto = getElementById('inputCusto')
-    let inputTempo = getElementById('inputTempo')
-    let inputGenero = getElementById('inputGenero')
-    let inputAtores = getElementById('inputAtores')
-    let inputDiretores = getElementById('inputDiretores')
-    let inputRealizador = getElementById('inputRealizador')
-    let inputImageUrl = getElementById('inputImageUrl')
-    let inputSinopse = getElementById('inputSinopse')
-    let inputStudio = getElementById('inputStudio')
-    let inputDuracao = getElementById('inputDuracao')
-
+    let inputNome = document.getElementById('inputNome')
+    let inputPTNome = document.getElementById('inputPTNome')
+    let inputAno = document.getElementById('inputAno')
+    let inputCusto = document.getElementById('inputCusto')
+    let inputTempo = document.getElementById('inputTempo')
+    let inputGenero = document.getElementById('inputGenero')
+    let inputAtores = document.getElementById('inputAtores')
+    let inputDiretores = document.getElementById('inputDiretores')
+    let inputRealizador = document.getElementById('inputRealizador')
+    let inputImageUrl = document.getElementById('inputImageUrl')
+    let inputSinopse = document.getElementById('inputSinopse')
+    let inputStudio = document.getElementById('inputStudio')
+    let inputDuracao = document.getElementById('inputDuracao')
+    let fields = [inputNome,inputPTNome,inputAno,inputCusto,inputTempo,inputGenero,inputAtores,inputDiretores,
+        inputRealizador,inputImageUrl,inputSinopse,inputStudio,inputDuracao]
+    if(!checkForm(fields)){
+        alert('Erro!\n Preencha todos os campos para continuar!')
+        return
+    }
     let response = await fetch(`http://localhost:3000/movie/create`,{
         method: 'POST',headers: new Headers({'content-type': 'application/json',
         Authorization: `Bearer ${localStorage.token}`}),
@@ -744,12 +758,12 @@ async function insertMovie(){
             totalRecordingDays: inputTempo.value,
             cost: inputCusto.value,
             synopsis: inputSinopse.value,
-            genre: inputGenero,
+            genre: inputGenero.value,
             pictureUrl: inputImageUrl.value,
-            studioId: inputStudio,
-            actors: [inputAtores],
-            directors: [inputDiretores],
-            producers: [inputRealizador]})});
+            studioId: inputStudio.value,
+            actors: getMultiSelection('inputAtores'),
+            directors: getMultiSelection('inputDiretores'),
+            producers: getMultiSelection('inputRealizador')})});
     if(!response.ok){
         alert(`Error! \nMensagem:${response.text()}`)
         return
@@ -767,8 +781,8 @@ async function insertator(){
     let inputSexo = document.getElementById('inputSexo')
     let inputImageUrl = document.getElementById('inputImageUrl')
     let inputIdade = document.getElementById('inputIdade')
-
-    if(!checkForm(inputNome,inputNascionalidade,inputNascimento,inputSexo,inputImageUrl,inputIdade)){
+    let fields = [inputNome,inputNascionalidade,inputNascimento,inputSexo,inputImageUrl,inputIdade]
+    if(!checkForm(fields)){
         alert('Erro!\n Preencha todos os campos para continuar!')
         return
     }
@@ -798,8 +812,8 @@ async function insertdiretor(){
     let inputSexo = document.getElementById('inputSexo')
     let inputImageUrl = document.getElementById('inputImageUrl')
     let inputIdade = document.getElementById('inputIdade')
-
-    if(!checkForm(inputNome,inputNascionalidade,inputNascimento,inputSexo,inputImageUrl,inputIdade)){
+    let fields = [inputNome,inputNascionalidade,inputNascimento,inputSexo,inputImageUrl,inputIdade]
+    if(!checkForm(fields)){
         alert('Erro!\n Preencha todos os campos para continuar!')
         return
     }
@@ -829,8 +843,8 @@ async function insertprodutor(){
     let inputSexo = document.getElementById('inputSexo')
     let inputImageUrl = document.getElementById('inputImageUrl')
     let inputIdade = document.getElementById('inputIdade')
-
-    if(!checkForm(inputNome,inputNascionalidade,inputNascimento,inputSexo,inputImageUrl,inputIdade)){
+    let fields = [inputNome,inputNascionalidade,inputNascimento,inputSexo,inputImageUrl,inputIdade]
+    if(!checkForm(fields)){
         alert('Erro!\n Preencha todos os campos para continuar!')
         return
     }
@@ -992,16 +1006,40 @@ async function getAllMovies(){
     let reponseData = await response.json()
     let movieList =[]
     reponseData.forEach(movie => {
-        movieList.push(new 
-            Movie(movie.id,movie.portuguese_title,movie.year,
-                movie.genre,'dir','ator',movie.pictureUrl))
+        movieList.push(new Movie(movie.id,movie.portuguese_title,movie.year,movie.genre,
+            movie.directors,movie.actors,movie.pictureUrl,movie.cost,movie.totalRecordingDays))
     });
     return movieList
 }
 
+function cleanSearchTbody(){
+    let searchTbody = document.getElementById('searchTbody')
+    searchTbody.innerHTML=''
+}
+
 async function searchMovieToEdit(){
     let tableSearch = document.getElementById('tableSearch')
+    let inputSearch = document.getElementById('inputSearch').value
+    if(inputSearch==null || inputSearch==''){return}
+    let searchTbody = document.getElementById('searchTbody')
     tableSearch.style.display='block'
+    cleanSearchTbody()
+    let resp = await fetch(`http://localhost:3000/search/movie/${inputSearch}`,{
+        headers: new Headers({'content-type': 'application/json'})})
+    if(!resp.ok){
+        alert(`Erro ao carregar os dados.\n${resp.text()}`)
+        return
+    }
+    let movies = await resp.json()
+    movies.forEach(movie=>{
+        searchTbody.innerHTML+=`<tr>
+        <td><button class="btn btn-dark" onclick="updateMovie(${movie.id})">Editar</button></td>
+        <td>${movie.id}</td>
+        <td>${movie.portuguese_title}</td>
+        <td>${movie.year}</td>
+        <td><button class="btn btn-danger" onclick="deleteMovie(${movie.id})">Deletar</button></td>
+        </tr>`
+    })
 }
 
 function adminLogin(){
@@ -1013,4 +1051,26 @@ function convertTimestampToDate(timestamp){
     var month = timestamp.substring(5, 7);
     var day = timestamp.substring(8, 10);
     return `${day}-${month}-${year} `
+}
+
+function convertMovie(movie){
+    let actors =[] 
+    let directors=[]
+    movie.actors.forEach(actor=>{
+        actors.push(actor.name)
+    })
+    movie.directors.forEach(director=>{
+        directors.push(director.name)
+    })
+
+    return new Movie(
+        movie.id,
+        movie.portuguese_title,
+        movie.year,
+        movie.genre,
+        directors,
+        actors,
+        movie.pictureUrl,
+        movie.cost,
+        movie.totalRecordingDays)
 }

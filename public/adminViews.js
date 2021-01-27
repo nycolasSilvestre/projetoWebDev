@@ -140,6 +140,8 @@ function getAddItem(type){
                               <option>Animação</option>
                               <option>Ação</option>
                               <option>Aventura</option>
+                              <option>Documentário</option>
+                              <option>Drama</option>
                               <option>Épico</option>
                               <option>Fantasia</option>
                               <option>Guerra</option>
@@ -308,8 +310,6 @@ function getEditItem(type){
                 <th>Selecionar</th>
                 <th>ID</th>
                 <th>Nome do filme</th>
-                <th>Diretor/Diretores</th>
-                <th>Ator/Atores</th>
                 <th>Ano</th>
                 <th>Deletar</th>
                 </thead>
@@ -358,6 +358,8 @@ function getEditItem(type){
                               <option>Animação</option>
                               <option>Ação</option>
                               <option>Aventura</option>
+                              <option>Documentário</option>
+                              <option>Drama</option>
                               <option>Épico</option>
                               <option>Fantasia</option>
                               <option>Guerra</option>

@@ -89,3 +89,4 @@ module.exports.Producer = Producer;
 module.exports.Studio = Studio;
 module.exports.User = User;
 module.exports.Claim = Claim;
+module.exports.sequelize =sequelize
