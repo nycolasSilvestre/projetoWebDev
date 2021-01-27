@@ -65,7 +65,6 @@ const adminpanelTop ='<!DOCTYPE html>'
 +'                  </a>'
 +'                  <div class="dropdown-menu" aria-labelledby="navbarStudiosDropdown">'
 +'                    <a class="dropdown-item" type="button" onclick="openAdminInsertItem(\'Usuário\')">Inserir novo</a>'
-+'                    <a class="dropdown-item" type="button" onclick="openAdminEditItem(\'Usuário\')">Editar existente</a>'
 +'                  </div>'
 +'            </li>'
 +'        </ul>'
@@ -177,7 +176,7 @@ function getAddItem(type){
                       <label for="inputSinopse">Sinopse:</label>
                       <textarea class="form-control" id="inputSinopse" rows="3"></textarea>
                   </div>
-                  <button type="button" onclick="clearFields()" class="btn btn-secondary">Cancelar</button>
+                  <button type="button" onclick="openAdmin()" class="btn btn-secondary">Cancelar</button>
                   <button type="button" onclick="insertMovie()" class="btn btn-primary">Criar</button>
                  </form>`
             break;
@@ -217,7 +216,7 @@ function getAddItem(type){
                     <input type="text" class="form-control" id="inputUrlImage">
                 </div>
             </div>
-            <button type="button" onclick="clearFields()" class="btn btn-secondary">Cancelar</button>
+            <button type="button" onclick="openAdmin()" class="btn btn-secondary">Cancelar</button>
             <button type="button" onclick="insertStudio()" class="btn btn-primary">Criar</button>
         </form>`
             break;
@@ -245,7 +244,7 @@ function getAddItem(type){
                     <input type="password" class="form-control" id="inputPass">
                 </div>
             </div>
-            <button type="button" onclick="clearFields()" class="btn btn-secondary">Cancelar</button>
+            <button type="button" onclick="openAdmin()" class="btn btn-secondary">Cancelar</button>
             <button type="button" onclick="insertUser()" class="btn btn-primary">Criar</button>
             </form>`
             break;
@@ -284,7 +283,7 @@ function getAddItem(type){
                 <input type="text" class="form-control" id="inputImageUrl">
                 </div>
                 </div>
-                <button type="button" onclick="clearFields()" class="btn btn-secondary">Cancelar</button>
+                <button type="button" onclick="openAdmin()" class="btn btn-secondary">Cancelar</button>
                 <button type="button" onclick="insert${type.toLowerCase()}()" class="btn btn-primary">Criar</button>
                 </form>`
             break;        
@@ -319,6 +318,11 @@ function getEditItem(type){
                 </div>
                 <hr>
                 <form>
+                <div class="form-row">
+                <div class="form-group col-md-1">
+                <label for="movieId">Id:</label>
+                <input type="text" class="form-control" id="movieId" readonly>
+                </div> </div>
                   <div class="form-row">
                       <div class="form-group col-md-4">
                           <label for="inputNome">Nome Original:</label>
@@ -342,7 +346,7 @@ function getEditItem(type){
                   <div class="form-row justify-content-around">
                       <div class="form-group col-md-3">
                           <label for="inputAno">Ano de Lançamento:</label>
-                          <input type="date" class="form-control" id="inputAno">
+                          <input type="text" class="form-control" id="inputAno">
                       </div>
                       <div class="form-group col-md-3">
                           <label for="inputCusto">Custo de Produção:</label>
@@ -395,8 +399,8 @@ function getEditItem(type){
                       <label for="inputSinopse">Sinopse:</label>
                       <textarea class="form-control" id="inputSinopse" rows="3"></textarea>
                   </div>
-                  <button type="button" onclick="clearFields()" class="btn btn-secondary">Cancelar</button>
-                  <button type="button" onclick="insertMovie()" class="btn btn-primary">Criar</button>
+                  <button type="button" onclick="openAdmin()" class="btn btn-secondary">Cancelar</button>
+                  <button type="button" onclick="editMovie()" class="btn btn-primary">Salvar</button>
                  </form>`
             break;
         case 'estudio':
@@ -459,55 +463,6 @@ function getEditItem(type){
                 <button type="button" onclick="editStudio()" class="btn btn-primary">Salvar</button>
                 </form>`
             break;
-        case 'usuário':
-            form =`<h5 class="section-title">${title}</h5>
-                <hr>
-                <form class="form-inline mb-5">
-                <label for="inputSearch">Nome do Usuário</label>
-                <input class="form-control mx-5" id="inputSearch" type="text" placeholder="Insira o nome do Usuário a ser editado">
-                <button class="btn btn-primary" type="button" onclick="searchUserToEdit()">Buscar</button>
-                </form>
-                <div id="tableSearch" style="display: none;">
-                <table class="table table-striped">
-                <thead>
-                <th>Selecionar</th>
-                <th>ID</th>
-                <th>Primeiro Nome</th>
-                <th>Apelido</th>
-                <th>Email</th>
-                <th>Deletar</th>
-                </thead>
-                <tbody id="searchTbody">
-                </tbody>
-                </table>
-                </div>
-                <hr>
-                <form>
-                <div class="form-row">
-                <div class="form-group col-md-6">
-                <label for="inputNome">Primeiro Nome:</label>
-                <input type="text" class="form-control" id="inputNome">
-                </div>
-                <div class="form-group col-md-6">
-                <label for="inputUNome">Ultimo Nome:</label>
-                <input type="text" class="form-control" id="inputUNome">
-                </div>
-                </div>
-                <div class="form-row">
-                <div class="form-group col-md-6">
-                <label for="inputEmail">E-mail:</label>
-                <input type="email" class="form-control" id="inputEmail">
-                </div>
-                <div class="form-group col-md-6">
-                <label for="inputPass">Nova Senha:</label>
-                <input type="password" class="form-control" id="inputPass">
-                </div>
-                </div>
-                </div>
-                <button type="button" onclick="clearEditFields()" class="btn btn-secondary">Cancelar</button>
-                <button type="button" onclick="editUser()" class="btn btn-primary">Salvar</button>
-                </form>`
-            break;        
         default:
             form =`<h5 class="section-title">${title}</h5>
                 <hr>
@@ -534,6 +489,11 @@ function getEditItem(type){
                 <hr>
                 <form>
                 <div class="form-row">
+                <div class="form-group col-md-1">
+                <label for="idActor">Id:</label>
+                <input type="text" class="form-control" id="idActor" readonly>
+                </div></div>
+                <div class="form-row">
                 <div class="form-group col-md-5">
                 <label for="inputNome">Nome:</label>
                 <input type="text" class="form-control" id="inputNome">
@@ -549,28 +509,24 @@ function getEditItem(type){
                 </div>
                 </div>
                 <div class="form-row">
-                <div class="form-group col-md-3">
-                <label for="inputEmail">E-mail:</label>
-                <input type="text" class="form-control" id="inputEmail">
+                <div class="form-group col-md-4">
+                <label for="inputNascimento">Data de nascimento:</label>
+                <input type="date" class="form-control" id="inputNascimento">
                 </div>
-                <div class="form-group col-md-3">
-                <label for="inputIdade">Idade:</label>
-                <input type="text" class="form-control" id="inputIdade">
-                </div>
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-4">
                 <label for="inputSexo">Sexo:</label>
                 <select class="form-control" id="inputSexo">
                 <option>Masculino</option>
                 <option>Feminino</option>
                 </select>
                 </div>
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-4">
                 <label for="inputImageUrl">Url Foto:</label>
                 <input type="text" class="form-control" id="inputImageUrl">
                 </div>
                 </div>
-                <button type="button" onclick="clearFields()" class="btn btn-secondary">Cancelar</button>
-                <button type="button" onclick="insert${type.toLowerCase()}()" class="btn btn-primary">Criar</button>
+                <button type="button" onclick="openAdmin()" class="btn btn-secondary">Cancelar</button>
+                <button type="button" onclick="edit${type}()" class="btn btn-primary">Salvar</button>
                 </form>`
             break;       
     }

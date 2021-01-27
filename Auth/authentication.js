@@ -8,7 +8,7 @@ function authenticateToken(req,res,next){
     if (token==null) return res.sendStatus(401)
 
     jwt.verify(token, process.env.JWT_SEC,(err,user) =>{
-        if(err) return res.status(403).send(err)
+        if(err) return res.status(403).send(err.message)
         req.user = user
         next()
     })

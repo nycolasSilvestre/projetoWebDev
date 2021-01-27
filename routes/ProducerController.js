@@ -1,4 +1,5 @@
-const { authenticateToken } = require("../Auth/authentication");
+const { authenticateToken, autheticateAdmin } = require("../Auth/authentication");
+const { QueryTypes } = require('sequelize');
 const db = require("../sequelize")
 const Producer = db.Producer
 
@@ -9,14 +10,24 @@ module.exports = (app) => {
               res.status(200).send(JSON.stringify(producer,null, 2));
           });
         });
-    app.get("/producer/:producerId", (req, res, next) => {
+    app.get("/producer/:producerId",authenticateToken,autheticateAdmin, (req, res, next) => {
         Producer.findByPk(req.params.producerId)
             .then((producer) => {
                 let response = producer != null ? producer : 'Ator não encontrado'
                 res.status(200).send(JSON.stringify(response,null, 2));
             });
         });
-    app.post("/producer/create", async (req, res, next) => {
+    app.get("/search/producer/:producerName",async (req, res, next) => {
+            try {
+                const records = await db.sequelize.
+                query(`select * from producers d 
+                where d."name" ilike '%${req.params.producerName}%'
+                order by d.name`,{type: QueryTypes.SELECT})
+                 res.status(200).send(JSON.stringify(records,null, 2));
+            } catch (error) {
+                res.status(500).send(error.message)
+            }});
+    app.post("/producer/create",authenticateToken,autheticateAdmin, async (req, res, next) => {
         try {
            const producer = await Producer.create({
                 name: req.body.name,
@@ -31,7 +42,7 @@ module.exports = (app) => {
             res.status(400).send(JSON.stringify(error,null,2))
         }
         });
-    app.put("/producer/update/:producerId", async (req, res, next) => {
+    app.put("/producer/update/:producerId",authenticateToken,autheticateAdmin, async (req, res, next) => {
             try {
                 Producer.update({
                     name: req.body.name,
@@ -46,7 +57,7 @@ module.exports = (app) => {
                 res.status(400).send(JSON.stringify(error,null,2))
             }
             });
-    app.delete("/producer/:producerId", async (req, res, next) => {
+    app.delete("/producer/:producerId",authenticateToken,autheticateAdmin, async (req, res, next) => {
         try {
             Producer.destroy({where:{id:req.params.producerId}})
             res.status(200).send(JSON.stringify('Producer successfully deleted!',null,2))

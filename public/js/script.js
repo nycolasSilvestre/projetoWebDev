@@ -772,6 +772,75 @@ async function insertMovie(){
         openAdmin()
 }
 
+async function editMovie(){
+    let movieId =  document.getElementById('movieId')
+    let inputNome = document.getElementById('inputNome')
+    let inputPTNome = document.getElementById('inputPTNome')
+    let inputAno = document.getElementById('inputAno')
+    let inputCusto = document.getElementById('inputCusto')
+    let inputTempo = document.getElementById('inputTempo')
+    let inputGenero = document.getElementById('inputGenero')
+    let inputAtores = document.getElementById('inputAtores')
+    let inputDiretores = document.getElementById('inputDiretores')
+    let inputRealizador = document.getElementById('inputRealizador')
+    let inputImageUrl = document.getElementById('inputImageUrl')
+    let inputSinopse = document.getElementById('inputSinopse')
+    let inputStudio = document.getElementById('inputStudio')
+    let inputDuracao = document.getElementById('inputDuracao')
+    let fields = [inputNome,inputPTNome,inputAno,inputCusto,inputTempo,inputGenero,inputAtores,inputDiretores,
+        inputRealizador,inputImageUrl,inputSinopse,inputStudio,inputDuracao]
+    if(!checkForm(fields)){
+        alert('Erro!\n Preencha todos os campos para continuar!')
+        return
+    }
+    let response = await fetch(`http://localhost:3000/movie/update/${movieId.value}`,{
+        method: 'PUT',headers: new Headers({'content-type': 'application/json',
+        Authorization: `Bearer ${localStorage.token}`}),
+        body: JSON.stringify({
+            title: inputNome.value,
+            portuguese_title: inputPTNome.value,
+            year: inputAno.value,
+            duration: inputDuracao.value,
+            totalRecordingDays: inputTempo.value,
+            cost: inputCusto.value,
+            synopsis: inputSinopse.value,
+            genre: inputGenero.value,
+            pictureUrl: inputImageUrl.value,
+            studioId: inputStudio.value,
+            actors: getMultiSelection('inputAtores'),
+            directors: getMultiSelection('inputDiretores'),
+            producers: getMultiSelection('inputRealizador')})});
+    if(!response.ok){
+        alert(`Error! \nMensagem:${response.text()}`)
+        return
+    }
+        alert('Filme atualizado com Sucesso!')
+        openAdmin()
+}
+
+async function deleteMovie(movieId){
+    if (!confirm("Está certo que deseja deletar esse filme?")){return}
+    let response = await fetch(`http://localhost:3000/movie/${movieId}`,{
+        method: 'DELETE',headers: new Headers({'content-type': 'application/json',
+        Authorization: `Bearer ${localStorage.token}`})})
+    if(!response.ok){
+        alert(`Erro!\n${await response.text()}`)
+        return
+    }
+    alert('Filme deletado com sucesso!')
+    openAdmin()
+}
+
+function deleteConfirmation(type){
+  let confirmation = confirm("Press a button!");
+  if (confirmation == true) {
+    return
+  } else {
+    txt = "You pressed Cancel!";
+  }
+
+
+}
 
 async function insertator(){
     
@@ -1042,6 +1111,56 @@ async function searchMovieToEdit(){
     })
 }
 
+async function updateMovie(movieId){
+    let resp = await fetch(`http://localhost:3000/movie/${movieId}`,{
+        headers: new Headers({'content-type': 'application/json',
+        Authorization: `Bearer ${localStorage.token}`})}
+    )
+    if(!resp.ok){
+        throw new Error(resp.json().name)
+    }
+    let movie = await resp.json()
+    document.getElementById('movieId').value =movie.id
+    let inputNome = document.getElementById('inputNome')
+    let inputPTNome = document.getElementById('inputPTNome')
+    let inputStudio = document.getElementById('inputStudio')
+    let inputDuracao = document.getElementById('inputDuracao')
+    let inputAno = document.getElementById('inputAno')
+    let inputCusto = document.getElementById('inputCusto')
+    let inputTempo = document.getElementById('inputTempo')
+    let inputAtores = document.getElementById('inputAtores')
+    let inputDiretores = document.getElementById('inputDiretores')
+    let inputRealizador = document.getElementById('inputRealizador')
+    let inputImageUrl = document.getElementById('inputImageUrl')
+    let inputSinopse = document.getElementById('inputSinopse')
+    
+    // fields =[inputNome,inputPTNome,inputStudio,inputDuracao,inputAno,inputCusto,inputTempo,
+    // inputAtores,inputDiretores,inputRealizador,inputImageUrl,inputSinopse]
+    
+    // if(!checkForm(fields)){
+    //     alert('Erro!\n Preencha todos os campos para continuar!')
+    //     return
+    // }
+
+    let studiosList = await getOptionsList('studios')
+    let actorsList = await getOptionsList('actors')
+    let directorsList = await getOptionsList('directors')
+    let prodList = await getOptionsList('producers')
+
+    inputNome.value = movie.title
+    inputPTNome.value = movie.portuguese_title
+    inputDuracao.value = movie.duration
+    inputAno.value = movie.year
+    inputCusto.value = movie.cost
+    inputTempo.value = movie.totalRecordingDays
+    inputAtores.innerHTML = inputAtores.innerHTML.replace('[#ACTOR_LIST#]',actorsList)
+    inputDiretores.innerHTML = inputDiretores.innerHTML.replace('[#DIRECTOR_LIST#]',directorsList)
+    inputRealizador.innerHTML = inputRealizador.innerHTML.replace('[#PRODUCER_LIST#]',prodList)
+    inputStudio.innerHTML =inputStudio.innerHTML.replace('[#STUDIO_LIST#]',studiosList)
+    inputImageUrl.value = movie.pictureUrl
+    inputSinopse.value = movie.synopsis
+}
+
 function adminLogin(){
     let window = window.open('mainpage.html','_self')
 }
@@ -1052,25 +1171,298 @@ function convertTimestampToDate(timestamp){
     var day = timestamp.substring(8, 10);
     return `${day}-${month}-${year} `
 }
+function convertTimestampToDateUsa(timestamp){
+    var year = timestamp.substring(0, 4);
+    var month = timestamp.substring(5, 7);
+    var day = timestamp.substring(8, 10);
+    return `${year}-${month}-${day} `
+}
 
-function convertMovie(movie){
-    let actors =[] 
-    let directors=[]
-    movie.actors.forEach(actor=>{
-        actors.push(actor.name)
+async function searchAtorToEdit(){
+    let tableSearch = document.getElementById('tableSearch')
+    let inputSearch = document.getElementById('inputSearch').value
+    if(inputSearch==null || inputSearch==''){return}
+    let searchTbody = document.getElementById('searchTbody')
+    tableSearch.style.display='block'
+    cleanSearchTbody()
+    let resp = await fetch(`http://localhost:3000/search/actors/${inputSearch}`,{
+        headers: new Headers({'content-type': 'application/json'})})
+    if(!resp.ok){
+        alert(`Erro ao carregar os dados.\n${resp.text()}`)
+        return
+    }
+    let actors = await resp.json()
+    actors.forEach(actor=>{
+        searchTbody.innerHTML+=`<tr>
+        <td><button class="btn btn-dark" onclick="updateActor(${actor.id})">Editar</button></td>
+        <td>${actor.id}</td>
+        <td>${actor.name}</td>
+        <td>${actor.nationality}</td>
+        <td>${convertTimestampToDate(actor.birthday)}</td>
+        <td>${actor.genre}</td>
+        <td><button class="btn btn-danger" onclick="deleteActor(${actor.id})">Deletar</button></td>
+        </tr>`
     })
-    movie.directors.forEach(director=>{
-        directors.push(director.name)
-    })
+}
 
-    return new Movie(
-        movie.id,
-        movie.portuguese_title,
-        movie.year,
-        movie.genre,
-        directors,
-        actors,
-        movie.pictureUrl,
-        movie.cost,
-        movie.totalRecordingDays)
+async function updateActor(actorId){
+    let resp = await fetch(`http://localhost:3000/actors/${actorId}`,{
+        headers: new Headers({'content-type': 'application/json',
+        Authorization: `Bearer ${localStorage.token}`})}
+    )
+    if(!resp.ok){
+        throw new Error(resp.json().name)
+    }
+    let actor = await resp.json()
+    document.getElementById('idActor').value =actor.id
+    let inputNome = document.getElementById('inputNome')
+    let inputNascionalidade = document.getElementById('inputNascionalidade')
+    let inputIdade = document.getElementById('inputIdade')
+    let inputNascimento = document.getElementById('inputNascimento')
+    let inputSexo = document.getElementById('inputSexo')
+    let inputImageUrl = document.getElementById('inputImageUrl')
+
+    inputNome.value = actor.name
+    inputNascionalidade.value = actor.nationality
+    inputIdade.value = actor.age
+    inputNascimento.value = convertTimestampToDateUsa(actor.birthday)
+    inputSexo.value = actor.genre
+    inputImageUrl.value = actor.pictureUrl
+}
+
+async function editAtor(){
+    let idActor = document.getElementById('idActor')
+    let inputNome = document.getElementById('inputNome')
+    let inputNascionalidade = document.getElementById('inputNascionalidade')
+    let inputNascimento = document.getElementById('inputNascimento')
+    let inputSexo = document.getElementById('inputSexo')
+    let inputImageUrl = document.getElementById('inputImageUrl')
+    let inputIdade = document.getElementById('inputIdade')
+    let fields = [inputNome,inputNascionalidade,inputNascimento,inputSexo,inputImageUrl,inputIdade,idActor]
+    if(!checkForm(fields)){
+        alert('Erro!\n Preencha todos os campos para continuar!')
+        return
+    }
+    let response = await fetch(`http://localhost:3000/actors/update/${idActor.value}`,{
+        method: 'PUT',headers: new Headers({'content-type': 'application/json',
+        Authorization: `Bearer ${localStorage.token}`}),
+        body: JSON.stringify({
+            name: inputNome.value,
+            nationality: inputNascionalidade.value,
+            birthday: inputNascimento.value,
+            age: inputIdade.value,
+            genre: inputSexo.value,
+            imageUrl: inputImageUrl.value})});
+    if(!response.ok){
+        alert(`Error! \nMensagem:${response.text()}`)
+        return
+    }
+        alert('Actor atualizado com Sucesso!')
+        openAdmin()
+}
+
+async function deleteActor(actorId){
+    if (!confirm("Está certo que deseja deletar esse ator?")){return}
+    let response = await fetch(`http://localhost:3000/actors/${actorId}`,{
+        method: 'DELETE',headers: new Headers({'content-type': 'application/json',
+        Authorization: `Bearer ${localStorage.token}`})})
+    if(!response.ok){
+        alert(`Erro!\n${await response.text()}`)
+        return
+    }
+    alert('Ator deletado com sucesso!')
+    openAdmin()
+}
+
+async function searchDiretorToEdit(){
+    let tableSearch = document.getElementById('tableSearch')
+    let inputSearch = document.getElementById('inputSearch').value
+    if(inputSearch==null || inputSearch==''){return}
+    let searchTbody = document.getElementById('searchTbody')
+    tableSearch.style.display='block'
+    cleanSearchTbody()
+    let resp = await fetch(`http://localhost:3000/search/director/${inputSearch}`,{
+        headers: new Headers({'content-type': 'application/json'})})
+    if(!resp.ok){
+        alert(`Erro ao carregar os dados.\n${resp.text()}`)
+        return
+    }
+    let directors = await resp.json()
+    directors.forEach(director=>{
+        searchTbody.innerHTML+=`<tr>
+        <td><button class="btn btn-dark" onclick="updateDirector(${director.id})">Editar</button></td>
+        <td>${director.id}</td>
+        <td>${director.name}</td>
+        <td>${director.nationality}</td>
+        <td>${convertTimestampToDate(director.birthday)}</td>
+        <td>${director.genre}</td>
+        <td><button class="btn btn-danger" onclick="deleteDirector(${director.id})">Deletar</button></td>
+        </tr>`
+    })
+}
+
+async function updateDirector(directorId){
+    let resp = await fetch(`http://localhost:3000/director/${directorId}`,{
+        headers: new Headers({'content-type': 'application/json',
+        Authorization: `Bearer ${localStorage.token}`})}
+    )
+    if(!resp.ok){
+        throw new Error(resp.json().name)
+    }
+    let director = await resp.json()
+    document.getElementById('idActor').value =director.id
+    let inputNome = document.getElementById('inputNome')
+    let inputNascionalidade = document.getElementById('inputNascionalidade')
+    let inputIdade = document.getElementById('inputIdade')
+    let inputNascimento = document.getElementById('inputNascimento')
+    let inputSexo = document.getElementById('inputSexo')
+    let inputImageUrl = document.getElementById('inputImageUrl')
+
+    inputNome.value = director.name
+    inputNascionalidade.value = director.nationality
+    inputIdade.value = director.age
+    inputNascimento.value = convertTimestampToDateUsa(director.birthday)
+    inputSexo.value = director.genre
+    inputImageUrl.value = director.pictureUrl
+}
+
+async function editDiretor(){
+    let idDirector = document.getElementById('idActor')
+    let inputNome = document.getElementById('inputNome')
+    let inputNascionalidade = document.getElementById('inputNascionalidade')
+    let inputNascimento = document.getElementById('inputNascimento')
+    let inputSexo = document.getElementById('inputSexo')
+    let inputImageUrl = document.getElementById('inputImageUrl')
+    let inputIdade = document.getElementById('inputIdade')
+    let fields = [inputNome,inputNascionalidade,inputNascimento,inputSexo,inputImageUrl,inputIdade,idDirector]
+    if(!checkForm(fields)){
+        alert('Erro!\n Preencha todos os campos para continuar!')
+        return
+    }
+    let response = await fetch(`http://localhost:3000/director/update/${idDirector.value}`,{
+        method: 'PUT',headers: new Headers({'content-type': 'application/json',
+        Authorization: `Bearer ${localStorage.token}`}),
+        body: JSON.stringify({
+            name: inputNome.value,
+            nationality: inputNascionalidade.value,
+            birthday: inputNascimento.value,
+            age: inputIdade.value,
+            genre: inputSexo.value,
+            imageUrl: inputImageUrl.value})});
+    if(!response.ok){
+        alert(`Error! \nMensagem:${response.text()}`)
+        return
+    }
+        alert('Director atualizado com Sucesso!')
+        openAdmin()
+}
+
+async function deleteDirector(directorId){
+    if (!confirm("Está certo que deseja deletar esse diretor?")){return}
+    let response = await fetch(`http://localhost:3000/director/${directorId}`,{
+        method: 'DELETE',headers: new Headers({'content-type': 'application/json',
+        Authorization: `Bearer ${localStorage.token}`})})
+    if(!response.ok){
+        alert(`Erro!\n${await response.text()}`)
+        return
+    }
+    alert('Director deletado com sucesso!')
+    openAdmin()
+}
+
+
+async function searchProdutorToEdit(){
+    let tableSearch = document.getElementById('tableSearch')
+    let inputSearch = document.getElementById('inputSearch').value
+    if(inputSearch==null || inputSearch==''){return}
+    let searchTbody = document.getElementById('searchTbody')
+    tableSearch.style.display='block'
+    cleanSearchTbody()
+    let resp = await fetch(`http://localhost:3000/search/producer/${inputSearch}`,{
+        headers: new Headers({'content-type': 'application/json'})})
+    if(!resp.ok){
+        alert(`Erro ao carregar os dados.\n${resp.text()}`)
+        return
+    }
+    let producers = await resp.json()
+    producers.forEach(producer=>{
+        searchTbody.innerHTML+=`<tr>
+        <td><button class="btn btn-dark" onclick="updateProdutor(${producer.id})">Editar</button></td>
+        <td>${producer.id}</td>
+        <td>${producer.name}</td>
+        <td>${producer.nationality}</td>
+        <td>${convertTimestampToDate(producer.birthday)}</td>
+        <td>${producer.genre}</td>
+        <td><button class="btn btn-danger" onclick="deleteProdutor(${producer.id})">Deletar</button></td>
+        </tr>`
+    })
+}
+
+async function updateProdutor(producerId){
+    let resp = await fetch(`http://localhost:3000/producer/${producerId}`,{
+        headers: new Headers({'content-type': 'application/json',
+        Authorization: `Bearer ${localStorage.token}`})}
+    )
+    if(!resp.ok){
+        throw new Error(resp.json().name)
+    }
+    let producer = await resp.json()
+    document.getElementById('idActor').value =producer.id
+    let inputNome = document.getElementById('inputNome')
+    let inputNascionalidade = document.getElementById('inputNascionalidade')
+    let inputIdade = document.getElementById('inputIdade')
+    let inputNascimento = document.getElementById('inputNascimento')
+    let inputSexo = document.getElementById('inputSexo')
+    let inputImageUrl = document.getElementById('inputImageUrl')
+
+    inputNome.value = producer.name
+    inputNascionalidade.value = producer.nationality
+    inputIdade.value = producer.age
+    inputNascimento.value = convertTimestampToDateUsa(producer.birthday)
+    inputSexo.value = producer.genre
+    inputImageUrl.value = producer.pictureUrl
+}
+
+async function editProdutor(){
+    let idProdutor = document.getElementById('idActor')
+    let inputNome = document.getElementById('inputNome')
+    let inputNascionalidade = document.getElementById('inputNascionalidade')
+    let inputNascimento = document.getElementById('inputNascimento')
+    let inputSexo = document.getElementById('inputSexo')
+    let inputImageUrl = document.getElementById('inputImageUrl')
+    let inputIdade = document.getElementById('inputIdade')
+    let fields = [inputNome,inputNascionalidade,inputNascimento,inputSexo,inputImageUrl,inputIdade,idProdutor]
+    if(!checkForm(fields)){
+        alert('Erro!\n Preencha todos os campos para continuar!')
+        return
+    }
+    let response = await fetch(`http://localhost:3000/producer/update/${idProdutor.value}`,{
+        method: 'PUT',headers: new Headers({'content-type': 'application/json',
+        Authorization: `Bearer ${localStorage.token}`}),
+        body: JSON.stringify({
+            name: inputNome.value,
+            nationality: inputNascionalidade.value,
+            birthday: inputNascimento.value,
+            age: inputIdade.value,
+            genre: inputSexo.value,
+            imageUrl: inputImageUrl.value})});
+    if(!response.ok){
+        alert(`Error! \nMensagem:${response.text()}`)
+        return
+    }
+        alert('Produtor atualizado com Sucesso!')
+        openAdmin()
+}
+
+async function deleteProdutor(directorId){
+    if (!confirm("Está certo que deseja deletar esse produtor?")){return}
+    let response = await fetch(`http://localhost:3000/producer/${directorId}`,{
+        method: 'DELETE',headers: new Headers({'content-type': 'application/json',
+        Authorization: `Bearer ${localStorage.token}`})})
+    if(!response.ok){
+        alert(`Erro!\n${await response.text()}`)
+        return
+    }
+    alert('Director deletado com sucesso!')
+    openAdmin()
 }

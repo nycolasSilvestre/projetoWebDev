@@ -1,4 +1,5 @@
-const { authenticateToken } = require("../Auth/authentication");
+const { authenticateToken, autheticateAdmin } = require("../Auth/authentication");
+const { QueryTypes } = require('sequelize');
 const db = require("../sequelize")
 const Actor = db.Actor
 
@@ -9,14 +10,25 @@ module.exports = (app) => {
               res.status(200).send(JSON.stringify(actor,null, 2));
           });
         });
-    app.get("/actors/:actorId", (req, res, next) => {
+        
+    app.get("/search/actors/:actorName",async (req, res, next) => {
+        try {
+            const records = await db.sequelize.
+            query(`select * from actors a 
+            where a."name" ilike '%${req.params.actorName}%'
+            order by a.name`,{type: QueryTypes.SELECT})
+             res.status(200).send(JSON.stringify(records,null, 2));
+        } catch (error) {
+            res.status(500).send(error.message)
+        }});
+    app.get("/actors/:actorId", authenticateToken,autheticateAdmin,(req, res, next) => {
         Actor.findByPk(req.params.actorId)
             .then((actor) => {
                 let response = actor != null ? actor : 'Ator não encontrado'
                 res.status(200).send(JSON.stringify(response,null, 2));
             });
         });
-    app.post("/actors/create", async (req, res, next) => {
+    app.post("/actors/create",authenticateToken,autheticateAdmin, async (req, res, next) => {
         try {
            const actor = await Actor.create({
                 name: req.body.name,
@@ -31,7 +43,7 @@ module.exports = (app) => {
             res.status(400).send(JSON.stringify(error,null,2))
         }
         });
-    app.put("/actors/update/:actorId", async (req, res, next) => {
+    app.put("/actors/update/:actorId",authenticateToken,autheticateAdmin, async (req, res, next) => {
             try {
                 Actor.update({
                     name: req.body.name,
@@ -46,7 +58,7 @@ module.exports = (app) => {
                 res.status(400).send(JSON.stringify(error,null,2))
             }
             });
-    app.delete("/actors/:actorId", async (req, res, next) => {
+    app.delete("/actors/:actorId",authenticateToken,autheticateAdmin, async (req, res, next) => {
         try {
             Actor.destroy({where:{id:req.params.actorId}})
             res.status(200).send(JSON.stringify('Actor successfully deleted!',null,2))

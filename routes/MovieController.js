@@ -1,4 +1,4 @@
-const { authenticateToken } = require("../Auth/authentication");
+const { authenticateToken, autheticateAdmin } = require("../Auth/authentication");
 const { QueryTypes } = require('sequelize');
 const db = require("../sequelize")
 
@@ -19,7 +19,7 @@ module.exports = (app) => {
         {type: QueryTypes.SELECT})
         res.status(200).send(JSON.stringify(records,null, 2))
         });
-    app.get("/movie/:movieId", (req, res, next) => {
+    app.get("/movie/:movieId", authenticateToken,autheticateAdmin ,(req, res, next) => {
         Movie.findByPk(req.params.movieId)
             .then((movie) => {
                 let response = movie != null ? movie : 'Filme não encontrado'
@@ -60,7 +60,7 @@ module.exports = (app) => {
             res.status(400).send(JSON.stringify(error,null,2))
         }
         });
-    app.put("/movie/update/:movieId", async (req, res, next) => {
+    app.put("/movie/update/:movieId",authenticateToken,autheticateAdmin ,async (req, res, next) => {
             try {
                let movie= await Movie.update({
                     title: req.body.title,
@@ -78,15 +78,15 @@ module.exports = (app) => {
                 let movieDirectors = req.body.directors
                 let movieProducers = req.body.producers
 
-                addActorsToMovie(movie.id,movieActors)
-                addDirectorsToMovie(movie.id,movieDirectors)
-                addProducersToMovie(movie.id,movieProducers)
+                addActorsToMovie(req.params.movieId,movieActors)
+                addDirectorsToMovie(req.params.movieId,movieDirectors)
+                addProducersToMovie(req.params.movieId,movieProducers)
                 res.status(200).send(JSON.stringify('Movie successfully updated!',null,2))
             } catch (error) {
                 res.status(400).send(JSON.stringify(error,null,2))
             }
             });
-    app.delete("/movie/:movieId", async (req, res, next) => {
+    app.delete("/movie/:movieId",authenticateToken,autheticateAdmin, async (req, res, next) => {
         try {
             Movie.destroy({where:{id:req.params.movieId}})
             res.status(200).send(JSON.stringify('Movie successfully deleted!',null,2))
