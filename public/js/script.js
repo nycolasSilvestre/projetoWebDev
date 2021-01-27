@@ -55,13 +55,13 @@ class Producer{
 }
 
 class Studio{
-    constructor(id,name,creationDate,nationality,city,imageUrl){
+    constructor(id,name,creationDate,nationality,city,imageUrl,numberOfMovies){
         this.id=id,
         this.name=name
         this.creationDate=creationDate
         this.nationality=nationality
         this.city=city
-        this.numberOfMovies=getRandomBetween(10,1000,false)
+        this.numberOfMovies=numberOfMovies
         this.imageUrl = imageUrl
         this.nameId = name.replace(/\s/g, "-")
     }
@@ -133,11 +133,41 @@ function setBuscaOnFocus(){
     let busca = document.getElementById("inp-busca")
     busca.focus()
 }
-function buscar(){
+async function buscar(){
+    let type = getTypeOfSearch()
+    let rd = document.getElementById(`radio${type}`)
+    rd.checked = true;
+    let busca = document.getElementById('inp-busca')
     cleanMain()
-    fillMainContent(getMoviesSearch())
-    updateLabel("8 Resuldados encontrados:")
+    if(busca.value=='' || busca.value == null){return}
+    switch (type) {
+        case 'movie':
+            let movies = await getMoviesSearch(busca.value)
+            fillMainContent(movies,false)
+            break;
+        case 'studio':
+            let studios = await getStudiosSearch(busca.value)
+            fillMainContentFavoritos(studios,'studio',false)
+            break;
+        case 'actor':
+            let actors = await getActorsSearch(busca.value)
+            fillMainContentFavoritos(actors,'actor',false)
+            break;
+        case 'director':
+            let directors = await getDirectorSearch(busca.value)
+            fillMainContentFavoritos(directors,'director',false)
+            break;
+        case 'producer':
+            let producers = await getProducerSearch(busca.value)
+            fillMainContentFavoritos(producers,'producer',false)
+            break;
+        default:
+            break;
+    }
+    updateLabel(`Resuldados encontrados:`)
     cleanFormBusca()
+
+    
 }
 /* Carrega index com as novidades*/
 function getNewMovies(){
@@ -151,58 +181,47 @@ function addRow(idStr){
 }
 async function getMoviesAll(){
     let movies = await getAllMovies()
-    // movies.push(new Movie(1,'Eurovision','2020','Musical','David Dobkin','Will Ferrell, Rachel McAdams, Dan Stevens, Natasia Demetriou, Pierce Brosnan','https://www.joblo.com/assets/images/joblo/posters/2018/11/Mary-Poppins-Returns-char-pos-4.jpg',10,100))
-    // movies.push(new Movie(1,'Sing','2016','Animação','Garth Jennings','Reese Witherspoon, Scarlett Johansson, Taron Egerton, Matthew McConaughey, Nick Offerman, Seth MacFarlane, John C. Reilly, Nick Kroll, Leslie Jones','img/posters/sing.jpg',10,100))
-    // movies.push(new Movie(1,'I Saw the Light','2016','Biografia','Marc Abraham','Tom Hiddleston, Elizabeth Olsen, David Krumholtz, Bradley Whitford','img/posters/ISawTheLight.jpg',10,100))
-    // movies.push(new Movie(1,'Step Up - All IN','2014','Musical','Trish Sie',' Ryan Guzman, Briana Evigan, Misha Gabriel, Izabella Miko','img/posters/step-up-all-in.jpg',10,100))
-    // movies.push(new Movie(1,'Metalica - Through The never','2013','Musical','Nimrod Antal','Dane DeHaan, Lars Ulrich, James Hetfield, Kirk Hammett','img/posters/metallica-through-never-pos.jpg',10,100))
-    // movies.push(new Movie(1,'Frozen II','2019','Animação','Chris Buck, Jennifer Lee','Josh Gad, Idina Menzel, Zachary Levi, Sterling K. Brown, Kristen Bell, Evan Rachel Wood','img/posters/frozen-2.jpg',10,100))
-    // movies.push(new Movie(1,'Toy Story 4','2019','Animação','John Lasseter, Josh Cooley','Tom Hanks, Tim Allen, Laurie Metcalf, Annie Potts, Joan Cusack, Patricia Arquette, Bonnie Hunt, Jeff Garlin','img/posters/ToyStory 4.jpg',10,100))
-    // movies.push(new Movie(1,'Lego Movie 2','2019','Animação','Mike Mitchell','Chris Pratt, Tiffany Haddish, Morgan Freeman, Elizabeth Banks, Charlie Day, Channing Tatum, Jonah Hill, Alison Brie, Will Arnett','img/posters/Lego-2.jpg',10,100))
-    // movies.push(new Movie(1,'Spider-man in Spider-verse','2018','Animação','Peter Ramsey, Bob Persichetti, Rodney Rothman','Shameik Moore, Mahershala Ali, Liev Schreiber, Jake Johnson, Hailee Steinfeld, Lily Tomlin, Nicolas Cage','img/posters/Spider-man in spider.verse-2.jpg',10,100))
-    // movies.push(new Movie(1,'BAD BOYS FOR LIFE','2019','ação','Adil El Arbi, Bilall Fallah','Will Smith, Martin Lawrence, Paola Nunez, Jacob Scipio, Vanessa Hudgens','img/posters/bad boys.jpg'))
-    // movies.push(new Movie(1,'STAR WARS: THE RISE OF SKYWALKER','2019','ficção','J.J. Abrams','Daisy Ridley, Oscar Isaac, John Boyega, Adam Driver, Keri Russell, Lupita Nyong`o, Mark Hamill, Carrie Fisher, Richard Grant, Anthony Daniels, Domhnall Gleeson, Dominic Monaghan, Greg Grunberg','img/posters/STAR WARS - THE RISE OF SKYWALKER.jpg'))
-    // movies.push(new Movie(1,'The Kings Man','2019','ação ','Matthew Vaughn','Ralph Fiennes, Gemma Arterton, Liam Neeson, Stanley Tucci, Aaron Taylor-Johnson, Matthew Goode, Charles Dance, Tom Hollander, Daniel Bruhl, Djimon Hounsou, Rhys Ifans','img/posters/The kings Man.jpg'))
-    // movies.push(new Movie(1,'JUMANJI: THE NEXT LEVEL','2019','ação /ficção','Jake Kasdan',' Dwayne Johnson, Jack Black, Karen Gillan, Kevin Hart, Danny DeVito, Nick Jonas, Awkwafina , Alex Wolff, Ser’Darius Blain, Madison Iseman, Morgan Turner','img/posters/jumanji_the_next_level.jpg'))
-    // movies.push(new Movie(1,'MARRIAGE STORY','2019','Drama','Noah Baumbach','Scarlett Johansson, Adam Driver, Laura Dern, Ray Liotta, Alan Alda, Wallace Shawn, Julie Hagerty','img/posters/MARRIAGE STORY.jpg'))
-    // movies.push(new Movie(1,'Rambo Last Blood','2019','ação','Adrian Grunberg','Sylvester Stallone, Paz Vega','img/posters/Rambo Last Blood.jpg'))
-    // movies.push(new Movie(1,'Joker','2019','Drama/ ação','Todd Phillips',' Joaquin Phoenix, Robert De Niro, Zazie Beetz, Frances Conroy, Brett Cullen, Bill Camp, Shea Whigham, Douglas Hodge','img/posters/Joker.jpg'))
-    // movies.push(new Movie(1,'TopGun -Maveric','2020','Ação','Joseph Kosinski',' Tom Cruise, Val Kilmer, Miles Teller, Thomasin McKenzie, Charles Parnell, Jay Ellis, Bashir Salahuddin, Danny Ramirez, Monica Barbaro','img/posters/TopGun -Maveric.jpg'))
-    // movies.push(new Movie(1,'Run','2020','Mistério/ Thriller','Aneesh Chaganty','Sarah Paulson, Pat Healy, Kiera Allen','img/posters/run-poster-main.jpg'))
-    // movies.push(new Movie(1,'BORAT SUBSEQUENT MOVIEFILM','2020','Comédia','','Sacha Baron Cohen','img/posters/Borat II.jpg'))
-    // movies.push(new Movie(1,'007 - NO TIME TO DIE','2021','Ação',' Cary Fukunaga','Daniel Craig, Lashana Lynch, Jeffrey Wright, Lea Seydoux, Naomie Harris, Ralph Fiennes, Rami Malek','img/posters/007 - No-Time-to-Die.jpg'))
-    // movies.push(new Movie(1,'THE SECRETS WE KEEP','2020','Crime/ Drama','Yuval Adler','Noomi Rapace, Joel Kinnaman, Chris Messina','img/posters/secrets_we_keep.jpg'))
-    // movies.push(new Movie(1,'The war with Grandpa','2020','Comédia','Tim Hill','Robert De Niro, Uma Thurman, Jane Seymour, Christopher Walken, Rob Riggle, Colin Ford, Cheech Marin','img/posters/The_War_With_Grandpa.jpg'))
-    // movies.push(new Movie(1,'Tenet','2020','ação /ficção','Christopher Nolan','John David Washington, Elizabeth Debicki, Robert Pattinson, Aaron Taylor-Johnson, Kenneth Branagh, Clémence Poésy','img/posters/Tenet.jpg'))
-    // movies.push(new Movie(1,'Radioactive','2020','Biografia','Marjane Satrapi','Rosamund Pike, Anya Taylor-Joy, Sam Riley','img/posters/radioactive.jpg'))
-    // movies.push(new Movie(1,'black widow','2021','ação','Cate Shortland','Scarlett Johansson, David Harbour, Rachel Weisz, Florence Pugh, William Hurt, Ray Winstone','img/posters/black widow.jpg'))
-    // movies.push(new Movie(1,'Fast 9','2021','ação /ficção','Justin Lin','Vin Diesel, Michelle Rodriguez, Nathalie Emmanuel, Tyrese Gibson, Chris \'Ludacris\' Bridges, Jordana Brewster, John Cena','img/posters/fast 9.jpg'))
-    // movies.push(new Movie(1,'Horse Girl','2020','Drama','Jeff Baena','Alison Brie, Molly Shannon, Paul Reiser, Robin Tunney, Jay Duplass','img/posters/Horse-Girl.jpg'))
     return movies
 }
 
-function getMoviesSearch(){
-    let movies =[]
-    movies.push(new Movie(1,'Sing','2016','Animação','Garth Jennings','Reese Witherspoon, Scarlett Johansson, Taron Egerton, Matthew McConaughey, Nick Offerman, Seth MacFarlane, John C. Reilly, Nick Kroll, Leslie Jones','img/posters/sing.jpg',1,10))
-    movies.push(new Movie(1,'Frozen II','2019','Animação','Chris Buck, Jennifer Lee','Josh Gad, Idina Menzel, Zachary Levi, Sterling K. Brown, Kristen Bell, Evan Rachel Wood','img/posters/frozen-2.jpg',1,10))
-    movies.push(new Movie(1,'Lego Movie 2','2019','Animação','Mike Mitchell','Chris Pratt, Tiffany Haddish, Morgan Freeman, Elizabeth Banks, Charlie Day, Channing Tatum, Jonah Hill, Alison Brie, Will Arnett','img/posters/Lego-2.jpg',1,10))
-    movies.push(new Movie(1,'BAD BOYS FOR LIFE','2019','ação','Adil El Arbi, Bilall Fallah','Will Smith, Martin Lawrence, Paola Nunez, Jacob Scipio, Vanessa Hudgens','img/posters/bad boys.jpg',1,10))
-    movies.push(new Movie(1,'The Kings Man','2019','ação ','Matthew Vaughn','Ralph Fiennes, Gemma Arterton, Liam Neeson, Stanley Tucci, Aaron Taylor-Johnson, Matthew Goode, Charles Dance, Tom Hollander, Daniel Bruhl, Djimon Hounsou, Rhys Ifans','img/posters/The kings Man.jpg',1,10))
-    movies.push(new Movie(1,'MARRIAGE STORY','2019','Drama','Noah Baumbach','Scarlett Johansson, Adam Driver, Laura Dern, Ray Liotta, Alan Alda, Wallace Shawn, Julie Hagerty','img/posters/MARRIAGE STORY.jpg',1,10))
-    movies.push(new Movie(1,'Joker','2019','Drama/ ação','Todd Phillips',' Joaquin Phoenix, Robert De Niro, Zazie Beetz, Frances Conroy, Brett Cullen, Bill Camp, Shea Whigham, Douglas Hodge','img/posters/Joker.jpg',1,10))
-    movies.push(new Movie(1,'Fast 9','2021','ação /ficção','Justin Lin','Vin Diesel, Michelle Rodriguez, Nathalie Emmanuel, Tyrese Gibson, Chris \'Ludacris\' Bridges, Jordana Brewster, John Cena','img/posters/fast 9.jpg',1,10))
-    return movies
+async function getMoviesSearch(busca){
+    
+    let resp = await fetch(`http://localhost:3000/search/all/${busca}`,{
+        headers: new Headers({'content-type': 'application/json',
+        Authorization: `Bearer ${localStorage.token}`})}
+    )
+    if(!resp.ok){
+        throw new Error(resp.json().name)
+    }
+    let respdata = await resp.json()
+    let movieList =[]
+    respdata.forEach(movie => {
+        movieList.push(new Movie(movie.id,movie.portuguese_title,movie.year,movie.genre,
+            movie.directors,movie.actors,movie.pictureUrl,movie.cost,movie.totalRecordingDays))
+    });
+    return movieList
+}
+
+async function getStudiosSearch(busca){
+    
+    let resp = await fetch(`http://localhost:3000/search/studio/${busca}`,{
+        headers: new Headers({'content-type': 'application/json',
+        Authorization: `Bearer ${localStorage.token}`})}
+    )
+    if(!resp.ok){
+        throw new Error(resp.json().name)
+    }
+    let respdata = await resp.json()
+    let studios =[]
+    respdata.forEach(studio => {
+        studios.push(new Studio(studio.id,studio.name,studio.creationDate, studio.nationality,studio.city,
+            studio.pictureUrl,studio.numberOfMovies))
+    });
+    return studios
 }
 
 function getFavoriteMovies(){
-    let favMovies =[]
-    favMovies.push(new Movie('Toy Story 4','2019','Animação','John Lasseter, Josh Cooley','Tom Hanks, Tim Allen, Laurie Metcalf, Annie Potts, Joan Cusack, Patricia Arquette, Bonnie Hunt, Jeff Garlin','img/posters/ToyStory 4.jpg'))
-    favMovies.push(new Movie('Lego Movie 2','2019','Animação','Mike Mitchell','Chris Pratt, Tiffany Haddish, Morgan Freeman, Elizabeth Banks, Charlie Day, Channing Tatum, Jonah Hill, Alison Brie, Will Arnett','img/posters/Lego-2.jpg'))
-    favMovies.push(new Movie('BAD BOYS FOR LIFE','2019','ação','Adil El Arbi, Bilall Fallah','Will Smith, Martin Lawrence, Paola Nunez, Jacob Scipio, Vanessa Hudgens','img/posters/bad boys.jpg'))
-    favMovies.push(new Movie('STAR WARS: THE RISE OF SKYWALKER','2019','ficção','J.J. Abrams','Daisy Ridley, Oscar Isaac, John Boyega, Adam Driver, Keri Russell, Lupita Nyong`o, Mark Hamill, Carrie Fisher, Richard Grant, Anthony Daniels, Domhnall Gleeson, Dominic Monaghan, Greg Grunberg','img/posters/STAR WARS - THE RISE OF SKYWALKER.jpg'))
-    favMovies.push(new Movie('JUMANJI: THE NEXT LEVEL','2019','ação /ficção','Jake Kasdan',' Dwayne Johnson, Jack Black, Karen Gillan, Kevin Hart, Danny DeVito, Nick Jonas, Awkwafina , Alex Wolff, Ser’Darius Blain, Madison Iseman, Morgan Turner','img/posters/jumanji_the_next_level.jpg'))
-    favMovies.push(new Movie('MARRIAGE STORY','2019','Drama','Noah Baumbach','Scarlett Johansson, Adam Driver, Laura Dern, Ray Liotta, Alan Alda, Wallace Shawn, Julie Hagerty','img/posters/MARRIAGE STORY.jpg'))
-    favMovies.push(new Movie('Joker','2019','Drama/ ação','Todd Phillips',' Joaquin Phoenix, Robert De Niro, Zazie Beetz, Frances Conroy, Brett Cullen, Bill Camp, Shea Whigham, Douglas Hodge','img/posters/Joker.jpg'))
+    let favMovies =getAllMovies()
     return favMovies
 }
 
@@ -259,7 +278,7 @@ function addMovieCardToRow(rowID,card,isFav){
     }
     let row = document.getElementById(rowID)
     row.innerHTML +='<div class="col-md-6 col-xl-4 mb-5 mt-n5"><div class="card movie-card h-100"'
-    +'data-toggle="modal" data-target="#movieModal-'+card.movie.nameId+'" style="width: 18rem;">'
+    +'data-toggle="modal" data-target="#movieModal-'+card.movie.nameId+'" id="'+card.movie.id+'" style="width: 18rem;">'
     /*antes */
     +'<div  class="modal fade show" id="movieModal-'+card.movie.nameId+'"tabindex="-1" aria-labelledby="movieModal-'+card.movie.nameId+'" aria-hidden="true">'
     +'<div  class="modal-dialog modal-lg big bg-white">'
@@ -285,16 +304,16 @@ function addMovieCardToRow(rowID,card,isFav){
     +card.year+'</h6><img src="'+card.movie.imageUrl+'" class="card-img" alt=""></div></div></div>'
 }
 
-function addPeopleCardToRow(rowID,cardActor,isFav){
+function addPeopleCardToRow(type,rowID,cardActor,isFav){
     let text ='Adivionar aos favoritos'
-    let  msg ='addToFavorites()'
+    let  msg =`addTo${type}Favorites()`
     if(isFav){
         text='Remover dos favoritos'
-        msg='removeFromFavorites()'
+        msg=`removeFrom${type}Favorites()`
     }
     let row = document.getElementById(rowID)
     row.innerHTML +='<div class="col-md-6 col-xl-4 mb-5 mt-n5"><div class="card movie-card h-100"'
-    +'data-toggle="modal" data-target="#movieModal-'+cardActor.actor.nameId+'" style="width: 18rem;">'
+    +'data-toggle="modal" data-target="#movieModal-'+cardActor.actor.nameId+'" id="'+cardActor.actor.Id+'" style="width: 18rem;">'
     /*antes */
     +'<div  class="modal fade show" id="movieModal-'+cardActor.actor.nameId+'"tabindex="-1" aria-labelledby="movieModal-'+cardActor.actor.nameId+'" aria-hidden="true">'
     +'<div  class="modal-dialog modal-lg big bg-white">'
@@ -367,7 +386,7 @@ function fillMainContent(movieList,isFav){
     }
 }
 
-function fillMainContentFavoritos(favoriteList,type){
+function fillMainContentFavoritos(favoriteList,type,isFav){
     rowCounter = 0
     rowId = "row"+rowCounter
     for(i=0; i < favoriteList.length;i++){
@@ -378,16 +397,16 @@ function fillMainContentFavoritos(favoriteList,type){
         }
         switch (type) {
             case "actor": 
-                addPeopleCardToRow(rowId,new CardActor(favoriteList[i]),true)
+                addPeopleCardToRow('actor',rowId,new CardActor(favoriteList[i]),isFav)
                 break;
             case "director": 
-                addPeopleCardToRow(rowId,new CardDirector(favoriteList[i]),true)
+                addPeopleCardToRow('director',rowId,new CardDirector(favoriteList[i]),isFav)
                 break;
             case "producer": 
-                addPeopleCardToRow(rowId,new CardProducer(favoriteList[i]),true)
+                addPeopleCardToRow('producer',rowId,new CardProducer(favoriteList[i]),isFav)
                 break;
             case "studio": 
-                addStudioCardToRow(rowId,new CardStudio(favoriteList[i]),true)
+                addStudioCardToRow(rowId,new CardStudio(favoriteList[i]),isFav)
                 break;
             default:
                 break;
@@ -502,11 +521,16 @@ function checkForm(fields){
   }
   return true
 }
-
-function listFavoriteMovies(){
+function listResultados(){
     cleanMain()
     showFavoriteMenu()
     fillMainContent(getFavoriteMovies(),true)
+    updateLabel("Resultado Busca")
+}
+async function listFavoriteMovies(){
+    cleanMain()
+    showFavoriteMenu()
+    fillMainContent(await getFavoriteMovies(),true)
     updateLabel("Filmes Favoritos")
 }
 async function listFavoriteActors(){
@@ -552,16 +576,19 @@ function updateLabel(value) {
     label.innerHTML=value
 }
 
+function showBuscaMenu(bucaObject){
+    let favMenu = document.getElementById("menu-favoritos")
+    favMenu.innerHTML = '<ul id="li"><li><a href="#" onclick="listFavoriteMovies()" class="btn-filtro-favoritos">Filmes</a></li></ul><ul><li><a href="#" onclick="listFavoriteActors()" class="btn-filtro-favoritos">Atores</a></li></ul><ul><li><a href="#" onclick="listFavoriteDirectors()" class="btn-filtro-favoritos">Diretores</a></li></ul><ul><li><a href="#" onclick="listFavoriteProducers()" class="btn-filtro-favoritos">Produtores</a></li></ul><ul><li><a href="#" onclick="listFavoriteStudios()" class="btn-filtro-favoritos">Estúdios</a></li></ul></div>'
+}
+
 function showFavoriteMenu(){
     let favMenu = document.getElementById("menu-favoritos")
     favMenu.innerHTML = '<ul id="li"><li><a href="#" onclick="listFavoriteMovies()" class="btn-filtro-favoritos">Filmes</a></li></ul><ul><li><a href="#" onclick="listFavoriteActors()" class="btn-filtro-favoritos">Atores</a></li></ul><ul><li><a href="#" onclick="listFavoriteDirectors()" class="btn-filtro-favoritos">Diretores</a></li></ul><ul><li><a href="#" onclick="listFavoriteProducers()" class="btn-filtro-favoritos">Produtores</a></li></ul><ul><li><a href="#" onclick="listFavoriteStudios()" class="btn-filtro-favoritos">Estúdios</a></li></ul></div>'
 }
 
 function cleanFormBusca(){
-    let inputs = document.getElementsByTagName("input")
-    for(inp of inputs){
-        inp.value=''
-    }
+    let input = document.getElementById('inp-busca')
+    input.value=''
 }
 
 async function getUpdatePage(){
@@ -1009,6 +1036,62 @@ async function getAllActors(){
     });
     return actorsList
 }
+
+async function getActorsSearch(name){
+    let response = await fetch(`http://localhost:3000/search/actors/${name}`,{
+        headers: new Headers({'content-type': 'application/json'})}
+    )
+    if(!response.ok){
+        alert(`Error! \nMensagem:${response.text()}`)
+        return
+    }
+    let reponseData = await response.json()
+    let actorsList =[]
+    reponseData.forEach(actor => {
+        actorsList.push(new 
+            Actor(actor.id,actor.name,actor.nationality,convertTimestampToDate(actor.birthday),actor.age,
+                actor.genre,actor.pictureUrl))
+    });
+    return actorsList
+}
+
+async function getDirectorSearch(name){
+    let response = await fetch(`http://localhost:3000/search/director/${name}`,{
+        headers: new Headers({'content-type': 'application/json'})}
+    )
+    if(!response.ok){
+        alert(`Error! \nMensagem:${response.text()}`)
+        return
+    }
+    let reponseData = await response.json()
+    let directors =[]
+    reponseData.forEach(director => {
+        directors.push(new 
+            Director(director.id,director.name,director.nationality,convertTimestampToDate(director.birthday),director.age,
+            director.genre,director.pictureUrl))
+    });
+    return directors
+}
+
+async function getProducerSearch(name){
+    let response = await fetch(`http://localhost:3000/search/producer/${name}`,{
+        headers: new Headers({'content-type': 'application/json'})}
+    )
+    if(!response.ok){
+        alert(`Error! \nMensagem:${response.text()}`)
+        return
+    }
+    let reponseData = await response.json()
+    let producers =[]
+    reponseData.forEach(producer => {
+        producers.push(new 
+            Producer(producer.id,producer.name,producer.nationality,convertTimestampToDate(producer.birthday),producer.age,
+            producer.genre,producer.pictureUrl))
+    });
+    return producers
+}
+
+
 
 async function getAllDirectors(){
     let response = await fetch('http://localhost:3000/director',{
@@ -1466,3 +1549,17 @@ async function deleteProdutor(directorId){
     alert('Director deletado com sucesso!')
     openAdmin()
 }
+
+function getTypeOfSearch(){
+    const types = document.querySelectorAll('input[name="searchType"]');
+            let selectedtype;
+            for (let type of types) {
+                if (type.checked) {
+                    selectedtype = type.value;
+                    break;
+                }
+            }
+            return selectedtype;
+}
+
+// 

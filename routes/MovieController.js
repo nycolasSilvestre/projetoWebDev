@@ -1,6 +1,7 @@
 const { authenticateToken, autheticateAdmin } = require("../Auth/authentication");
 const { QueryTypes } = require('sequelize');
 const db = require("../sequelize")
+const jwt = require("jsonwebtoken");
 
 const Movie = db.Movie
 
@@ -26,6 +27,48 @@ module.exports = (app) => {
                 res.status(200).send(JSON.stringify(response,null, 2));
             });
         });
+    app.get("/search/all/:name", async (req, res, next) => {
+            const records = await db.sequelize.
+            query(`select m.id, m.portuguese_title,
+            m."year",m.genre,m."pictureUrl", m."cost" ,m."totalRecordingDays",string_agg(d."name",', ') as directors
+            ,string_agg(a."name",', ') as actors
+            from movies m 
+            left join "DirectorMovies" dm on dm."movieId" = m.id 
+            left join "ActorMovies" am on am."movieId" =m.id 
+            left join directors d on d.id =dm."directorId" 
+            left join actors a on a.id = am."actorId" 
+            where m.portuguese_title ilike '%${req.params.name}%' or m.title ilike '%${req.params.name}%' 
+            or a."name" ilike '%${req.params.name}%' 
+            or d."name" ilike '%${req.params.name}%'
+            group by m.id, m.portuguese_title ,m."year",m.genre,m."pictureUrl", m."cost" ,m."totalRecordingDays"
+            order by m.portuguese_title asc`,
+            {type: QueryTypes.SELECT})
+             res.status(200).send(JSON.stringify(records,null, 2))
+            });
+
+        app.get("/favoritemovies", async (req, res, next) => {
+            const heders = req.headers ? req.headers['authorization'] : null;
+            const auth = heders.split(' ')
+            const token = auth[1]
+            const tokenInfo = jwt.verify(token,process.env.JWT_SEC)
+            const newactor = await db.Actor.findByPk(req.params.actorId)
+            const user = await db.User.findOne({include: db.Actor},{where:{email:tokenInfo.id}})
+            const records = await db.sequelize.
+                query(`select m.id, m.portuguese_title,
+                m."year",m.genre,m."pictureUrl", m."cost" ,m."totalRecordingDays",string_agg(d."name",', ') as directors
+                ,string_agg(a."name",', ') as actors
+                from "UserFavoriteMovies" ufm 
+                inner join movies m on ufm."movieId" =m.id 
+                left join "DirectorMovies" dm on dm."movieId" = m.id 
+                left join "ActorMovies" am on am."movieId" =m.id 
+                left join directors d on d.id =dm."directorId" 
+                left join actors a on a.id = am."actorId" 
+                where ufm."userId"  = ${user.id}
+                group by m.id, m.portuguese_title ,m."year",m.genre,m."pictureUrl", m."cost" ,m."totalRecordingDays"
+                order by m.portuguese_title asc`,
+                {type: QueryTypes.SELECT})
+                 res.status(200).send(JSON.stringify(records,null, 2))
+                });
     app.get("/search/movie/:name", async (req, res, next) => {
             const records = await db.sequelize.
             query(`select * from movies m 

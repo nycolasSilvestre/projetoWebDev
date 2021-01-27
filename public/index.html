@@ -95,44 +95,30 @@
           <input id="inp-busca" class="form-control mr-1" type="search" placeholder="Buscar por Nome de Filme, Ator, Estúdio... " aria-label="Search">
           <button class="btn btn-dark btn-busca my-2 my-sm-0" onclick="buscar()" type="button">Buscar</button>
         </div>
-      </form> 
-      <div class="row justify-content-center">
-        <a href="" class="text-light" data-toggle="collapse" data-target="#formColapsed" aria-controls="formColapsed"
-        aria-expanded="false" aria-label="Toggle navigation">Busca avançada</a></div>
-      <div id="formColapsed" class="collapse">
-        <form action="">
-          <div class="colapse mt-4 text-light">
-            <div class="row justify-content-center text-header">
-              <div class="col-3">
-                <label for="nomeFilme">Nome do Filme</label>
-                <input id="nomeFilme" class="form-control" type="text" placeholder="Nome do filme... " aria-label="Search">
-              </div>
-              <div class="col-3">
-                <label for="nomeAtor">Ator/ Atriz</label>
-                <input id="nomeAtor" class="form-control" type="text" placeholder="Nome do Ator... " aria-label="Search">
-              </div>
-              <div class="col-3">
-                <label for="nomeRealizador">Realizador(a)</label>
-                <input id="nomeRealizador" class="form-control" type="text" placeholder="Nome do Realizador... " aria-label="Search">
-              </div>
-            </div>
-            <div class="row justify-content-center text-header mt-2">
-              <div class="col-3">
-                <label for="nomeProdutor">Produtor(a)</label>
-                <input id="nomeProdutor" class="form-control" type="text" placeholder="Nome do Produtor(a)... " aria-label="Search">
-              </div>
-              <div class="col-3">
-                <label for="genero">Genero</label>
-                <input id="genero" class="form-control" type="text" placeholder="Genero... " aria-label="Search">
-              </div>
-              <div class="col-3">
-                <label for="nomeDiretor">Diretor(a)</label>
-                <input id="nomeDiretor" class="form-control" type="text" placeholder="Nome do Diretor(a)... " aria-label="Search">
-              </div>
-            </div>
+        <div class="form-row container justify-content-center mt-3">
+          <div class="mr-4">
+            <input type="radio" id="radiomovie" name="searchType" value="movie"
+                   checked>
+            <label for="radiomovie">Filme</label>
           </div>
-        </form> 
-      </div>
+          <div class="mr-4">
+            <input type="radio" id="radiostudio" name="searchType" value="studio">
+            <label for="radiostudio">Estúdio</label>
+          </div>
+          <div class="mr-4">
+            <input type="radio" id="radioactor" name="searchType" value="actor">
+            <label for="radioactor">Ator</label>
+          </div>
+          <div class="mr-4">
+            <input type="radio" id="radiodirector" name="searchType" value="director">
+            <label for="radiodirector">Diretor</label>
+          </div>
+          <div class="mr-4">
+            <input type="radio" id="radioproducer" name="searchType" value="producer">
+            <label for="radioproducer">Produtor</label>
+          </div>
+        </div>
+      </form> 
     </section>
     <section id="main-content" class="container pt-5 bg-white">
       <p id="label-resultado" class="text-resultado pl-5">Novos Filmes</p>

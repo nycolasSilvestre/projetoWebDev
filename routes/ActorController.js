@@ -10,7 +10,6 @@ module.exports = (app) => {
               res.status(200).send(JSON.stringify(actor,null, 2));
           });
         });
-        
     app.get("/search/actors/:actorName",async (req, res, next) => {
         try {
             const records = await db.sequelize.

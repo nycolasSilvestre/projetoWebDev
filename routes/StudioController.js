@@ -1,6 +1,7 @@
 const { authenticateToken } = require("../Auth/authentication");
 const db = require("../sequelize")
 const Studio = db.Studio
+const { QueryTypes } = require('sequelize');
 
 module.exports = (app) => {
     app.get("/studio" ,(req, res, next) => {
@@ -56,5 +57,15 @@ module.exports = (app) => {
             res.status(400).send(JSON.stringify(error,null,2))
         }
         });
+    app.get("/search/studio/:studioName",async (req, res, next) => {
+            try {
+                const records = await db.sequelize.
+                query(`select * from studios a 
+                where a."name" ilike '%${req.params.studioName}%'
+                order by a.name`,{type: QueryTypes.SELECT})
+                 res.status(200).send(JSON.stringify(records,null, 2));
+            } catch (error) {
+                res.status(500).send(error.message)
+            }});
 };
   
