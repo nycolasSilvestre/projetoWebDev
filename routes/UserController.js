@@ -9,16 +9,20 @@ const jwtRefSec = process.env.JWT_SEC_refresh
 const { authenticateToken } = require("../Auth/authentication");
 const claims = require('../models/claims');
 const { QueryTypes } = require('sequelize');
-
+const CryptoJS = require('crypto-js/core')
+CryptoJS.AES = require("crypto-js/aes");
 module.exports = (app) => {
     app.post('/register', async (req,res) => {
         try {
+            let encpass = req.body.signUpPassword
+            let bytes = CryptoJS.AES.decrypt(encpass,'WebDevEncrypt')
+            let decrpTpass =bytes.toString(CryptoJS.enc.Utf8)
             const user = await getUserByEmail(req.body.signUpEmail)
             if (user != null){
                 console.log(user)
                 throw new Error('Usuário já existente.')
             }
-            const hashedPass = await bcrypt.hash(req.body.signUpPassword,10)
+            const hashedPass = await bcrypt.hash(decrpTpass,10)
             let newUser = await User.create({
                 first_name: req.body.signUpName,
                 last_name: req.body.signUpLastname,

@@ -306,10 +306,10 @@ function addMovieCardToRow(rowID,card,isFav){
 
 function addPeopleCardToRow(type,rowID,cardActor,isFav){
     let text ='Adivionar aos favoritos'
-    let  msg =`addTo${type}Favorites()`
+    let  msg =`addToPeopleFavorites()`
     if(isFav){
         text='Remover dos favoritos'
-        msg=`removeFrom${type}Favorites()`
+        msg=`removeFromPeopleFavorites()`
     }
     let row = document.getElementById(rowID)
     row.innerHTML +='<div class="col-md-6 col-xl-4 mb-5 mt-n5"><div class="card movie-card h-100"'
@@ -449,9 +449,12 @@ async function login(user=null,pass=null){
         return
     }
     let token =null
+    
+    let passEnc = encrypt(pass.value)
+
     let loginResponse = await fetch('http://localhost:3000/login',
         {method: 'POST',headers: new Headers({'content-type': 'application/json'}),
-         body: JSON.stringify({username:user.value,password:pass.value})}
+         body: JSON.stringify({username:user.value,password:passEnc})}
         );
     
     if(!loginResponse.ok){
@@ -491,10 +494,11 @@ async function signUp(){
         signUpErrorMsg.innerHTML ='<p>Valide os campos e tente novamente!</p>'
         return
     }
+    let encPass = encrypt(pass.value)
     let signUptResp = await fetch('http://localhost:3000/register',
     {method: 'POST',headers: new Headers({'content-type': 'application/json'}),
      body: JSON.stringify({signUpName:name.value,signUpLastname:lastName.value,signUpEmail:user.value
-        ,signUpPassword:pass.value})}
+        ,signUpPassword:encPass})}
     );
     if(!signUptResp.ok){
         signUpErrorMsg.innerHTML='Erro. Tente novamente mais tarde!'
@@ -563,8 +567,14 @@ function cleanMain(){
     main.innerHTML='<p id="label-resultado" class="text-resultado pl-5">Filmes favoritos</p><div id="menu-favoritos" class="row justify-content-center mb-3">'
 }
 
-function addToFavorites(){
-    alert("Conteúdo adicionado aos favoritos!")
+async function addToFavorites(){
+    const token = localStorage.getItem('token') 
+    if(token && token != null && token != ''){
+        alert('Item adicionado aos favorito!')
+    }
+    else{
+        alert('Você deve estar logado para utilizar essa funcionalidade!')
+    }
 }
 
 function removeFromFavorites(){
@@ -1001,11 +1011,12 @@ async function insertUser(){
     let inputEmail = document.getElementById('inputEmail')
     let inputPass = document.getElementById('inputPass')
 
+    let passEnc = encrypt(inputPass.value)
 
     let signUptResp = await fetch('http://localhost:3000/register',
     {method: 'POST',headers: new Headers({'content-type': 'application/json'}),
      body: JSON.stringify({signUpName:inputNome.value,signUpLastname:inputUNome.value,signUpEmail:inputEmail.value
-        ,signUpPassword:inputPass.value})}
+        ,signUpPassword:passEnc})}
     );
     if(!signUptResp.ok){
         signUpErrorMsg.innerHTML='Erro. Tente novamente mais tarde!'
@@ -1562,4 +1573,18 @@ function getTypeOfSearch(){
             return selectedtype;
 }
 
-// 
+function encrypt(str){
+    let encrypted = CryptoJS.AES.encrypt(str, "WebDevEncrypt")
+    return encrypted.toString()
+}
+
+async function addToPeopleFavorites(){
+    const token = localStorage.getItem('token') 
+    if(token && token != null && token != ''){
+        alert('Item adicionado aos favorito!')
+    }
+    else{
+        alert('Você deve estar logado para utilizar essa funcionalidade!')
+    }
+
+}
